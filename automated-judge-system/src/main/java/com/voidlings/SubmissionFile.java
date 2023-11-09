@@ -1,16 +1,15 @@
 package com.voidlings;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class File {
+public class SubmissionFile {
     private String name;
     private String content;
-    private List<String> attributeList; //made string for now 
-    private List<String> methodList; // made string for now 
+    private List<String> attributeList; //made string for now
+    private List<String> methodList; // made string for now
 
     // Constructor
-    public File(String name, String content) {
+    public SubmissionFile(String name, String content) {
         this.name = name;
         this.content = content;
         this.attributeList = new ArrayList<>();
@@ -33,7 +32,7 @@ public class File {
                 break;
             } else if (inAttributeBlock && !line.trim().startsWith("//") && !line.trim().startsWith("/*")) {
                 // Check for lines within the attribute block and not commented out
-                attributeList.add(line); // Extract the attribute 
+                attributeList.add(line); // Extract the attribute
             }
         }
         return attributeList;
