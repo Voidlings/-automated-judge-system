@@ -4,16 +4,16 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Folder {
+public class Folder implements FileComponent{
     private String name;
-    private List<SubmissionFile> files;
-    private List<Folder> folders;
+    private List<FileComponent> allComponents;
+    private String path;
 
     // Constructor
-    public Folder(String name) {
+    public Folder(String name, String path) {
         this.name = name;
-        files = new ArrayList<>();
-        folders= new ArrayList<>();
+        this.allComponents= new ArrayList<>();
+        this.path= path;
     }
 
     // Method to create the actual directory
@@ -37,19 +37,9 @@ public class Folder {
         }
     }
 
-    // Method to add a file to the folder class
-    public void addFile(SubmissionFile file) {
-        files.add(file);
-    }
-
-    // Method to add a folder to the folder class
-    public void addFolder(Folder folder) {
-        folders.add(folder);
-    }
-
     // Method to check if a file exists in the folder
     public Boolean fileExists(String name) {
-        for (SubmissionFile file : files) {
+        for (FileComponent file : allComponents) {
             if (file.getName().equals(name)) {
                 return true;
             }
@@ -57,14 +47,30 @@ public class Folder {
         return false;
     }
 
+    public List<FileComponent> getFileComponents(){
+        return this.allComponents;
+    }
+
     // Getter method to retrieve the list of files
-    public List<SubmissionFile> getFiles() {
-        return files;
+    public List<JavaFile> getJavaFiles() {
+        List<JavaFile> javaFiles = new ArrayList<>();
+        for (FileComponent component : allComponents) {
+            if (!component.isFolder()) {
+                javaFiles.add((JavaFile) component);
+            }
+        }
+        return javaFiles;
     }
 
     // Getter method to retrieve the list of folders
     public List<Folder> getFolderList(){
-        return this.folders;
+        List<Folder> folders = new ArrayList<>();
+        for (FileComponent component : allComponents) {
+            if (component.isFolder()) {
+                folders.add((Folder) component);
+            }
+        }
+        return folders;
     }
 
     // Getter method to retrieve foldername
@@ -72,12 +78,31 @@ public class Folder {
         return this.name;
     }
 
-    public Folder getSubFolderByName(String folderName){
-        for (Folder folder : this.folders) {
-            if (folder.getName().equals(folderName)) {
-                return folder;
+    public void addComponent(FileComponent component) {
+        this.allComponents.add(component);
+    }
+
+    public FileComponent getComponentByName(String name) {
+        for (FileComponent component : this.allComponents) {
+            if (component.getName().equals(name)) {
+                return component;
             }
         }
         return null;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name= name;
+    }
+
+    @Override
+    public Boolean isFolder() {
+        return true;
+    }
+
+    @Override
+    public String getPath() {
+        return this.path;
     }
 }

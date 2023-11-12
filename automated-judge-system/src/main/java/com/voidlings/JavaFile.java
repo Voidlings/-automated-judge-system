@@ -1,27 +1,41 @@
 package com.voidlings;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.File;
+import java.io.FileNotFoundException;
 
-public class SubmissionFile {
+public class JavaFile implements FileComponent{
     private String name;
     private String content;
+    private String path;
     private List<String> attributeList; //made string for now
     private List<String> methodList; // made string for now
 
     // Constructor
-    public SubmissionFile(String name, String content) {
-        this.name = name;
+    public JavaFile(String name, String content, String path) {
+        setName(name);
         this.content = content;
         this.attributeList = new ArrayList<>();
         this.methodList = new ArrayList<>();
+        this.path = path;
     }
 
     // Getter methods
+    @Override
     public String getName() {
         return name;
     }
 
-    public List<String> extractAttributes() {
+    public String getContent(){
+        return this.content;
+    }
+
+    @Override
+    public String getPath(){
+        return this.path;
+    }
+
+    public List<String> extractAttributes(){
         String[] lines = content.split("\n");
         boolean inAttributeBlock = false;
 
@@ -76,5 +90,15 @@ public class SubmissionFile {
             }
         }
         return methodList;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name= name;
+    }
+
+    @Override
+    public Boolean isFolder() {
+        return false;
     }
 }
