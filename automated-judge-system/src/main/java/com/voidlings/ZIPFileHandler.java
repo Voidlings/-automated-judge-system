@@ -75,11 +75,6 @@ public class ZIPFileHandler implements FileHandler{
                         bos.write(buffer, 0, bytesRead);
                     }
 
-                    // Write the content to the outputFile
-                    try (FileOutputStream fos = new FileOutputStream(outputFile)) {
-                        fos.write(bos.toByteArray());
-                    }
-
                     String content = new String(bos.toByteArray());//content for SubmissionFile
 
                     /*Facillate adding of folders and files to the main Folder instance; submissionsFolder
@@ -99,6 +94,14 @@ public class ZIPFileHandler implements FileHandler{
                             currentFolder = existingFolder;
                         }
                         currentFolder.addFile(new SubmissionFile(folders[folders.length - 1], content));
+                        
+                        // Write the content to the outputFile
+                        try (FileOutputStream fos = new FileOutputStream(outputFile)) {
+                            if(entryName.endsWith(".java"))
+                                fos.write(("package com.voidlings.submissions." + currentFolder.getName() + ";\n")
+                                        .getBytes());
+                            fos.write(bos.toByteArray());
+                        }
                     }
                     else {
                         // Otherwise, add file directly to submissionFolder
