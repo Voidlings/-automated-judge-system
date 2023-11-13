@@ -1,4 +1,4 @@
-package com.voidlings;
+package com.voidlings.FileHandling;
 
 public interface FileHandler{
     public abstract Boolean checkFormat(String filePath);

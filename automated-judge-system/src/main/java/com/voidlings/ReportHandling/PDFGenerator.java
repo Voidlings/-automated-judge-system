@@ -1,4 +1,4 @@
-package com.voidlings;
+package com.voidlings.ReportHandling;
 
 public class PDFGenerator {
     

@@ -1,4 +1,4 @@
-package com.voidlings;
+package com.voidlings.FileHandling;
 
 public interface FileComponent {
     public abstract String getName();

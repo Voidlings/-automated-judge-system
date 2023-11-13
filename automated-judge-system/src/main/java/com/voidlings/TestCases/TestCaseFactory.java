@@ -1,4 +1,4 @@
-package com.voidlings;
+package com.voidlings.TestCases;
 
 public interface TestCaseFactory{
     

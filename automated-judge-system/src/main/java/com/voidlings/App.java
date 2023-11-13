@@ -7,6 +7,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
 
+import com.voidlings.FileHandling.Folder;
+import com.voidlings.FileHandling.ZIPFileHandler;
+
 public class App{
     public static void main(String[] args){
         /*To be replaced with Scanner state {

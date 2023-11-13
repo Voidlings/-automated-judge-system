@@ -1,4 +1,4 @@
-package com.voidlings;
+package com.voidlings.AssignmentHandling;
 
 public class AssignmentAttribute{
 
