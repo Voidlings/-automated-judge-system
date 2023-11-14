@@ -1,4 +1,6 @@
-package com.voidlings.submissions.Assignment 1;
+package com.voidlings.submissions.Assignment1;
+
+
 import java.time.LocalDateTime;
 
 /**

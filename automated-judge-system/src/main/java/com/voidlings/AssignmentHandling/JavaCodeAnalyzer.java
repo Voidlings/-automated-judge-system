@@ -9,18 +9,53 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class JavaCodeAnalyzer {
 
+    static class JavaClassInfo {
+        private String className;
+        private List<String> attributeNames = new ArrayList<>();
+        private List<String> methodNames = new ArrayList<>();
+
+        public JavaClassInfo(String className) {
+            this.className = className;
+        }
+
+        public String getClassName() {
+            return className;
+        }
+
+        public List<String> getAttributeNames() {
+            return attributeNames;
+        }
+
+        public List<String> getMethodNames() {
+            return methodNames;
+        }
+
+        public void addAttributeName(String attributeName) {
+            this.attributeNames.add(attributeName);
+        }
+
+        public void addMethodName(String methodName) {
+            this.methodNames.add(methodName);
+        }
+    }
+
+    // Declare classInfoMap as a static field
+    private static Map<String, JavaClassInfo> classInfoMap = new HashMap<>();
+
     static class NamingConventionVisitor extends VoidVisitorAdapter<Void> {
-        private List<String> predefinedClassNames = Arrays.asList("ClassA", "ClassB", "ClassC");
+        private List<String> predefinedClassNames = Arrays.asList("a", "b", "ClassC");
         private List<String> predefinedMethodNames = Arrays.asList("methodA", "methodB", "methodC");
         private List<String> predefinedAttributeNames = Arrays.asList("attributeA", "attributeB", "attributeC");
 
@@ -30,7 +65,10 @@ public class JavaCodeAnalyzer {
             String className = n.getNameAsString();
             if (!predefinedClassNames.contains(className)) {
                 System.out.println("Class name is not predefined: " + className);
-                // You can add more logic here, such as storing results, calculating scores, etc.
+
+                // Store information about the class
+                JavaClassInfo classInfo = new JavaClassInfo(className);
+                classInfoMap.put(className, classInfo);
             }
 
             // Visit field declarations (attributes)
@@ -43,7 +81,12 @@ public class JavaCodeAnalyzer {
             String attributeName = n.getVariable(0).getNameAsString();
             if (!predefinedAttributeNames.contains(attributeName)) {
                 System.out.println("Attribute name is not predefined: " + attributeName);
-                // You can add more logic here, such as storing results, calculating scores, etc.
+
+                // Get the current class's info and add the attribute name
+                JavaClassInfo currentClassInfo = classInfoMap.get(n.findAncestor(ClassOrInterfaceDeclaration.class).get().getNameAsString());
+                if (currentClassInfo != null) {
+                    currentClassInfo.addAttributeName(attributeName);
+                }
             }
 
             super.visit(n, arg);
@@ -55,7 +98,12 @@ public class JavaCodeAnalyzer {
             String methodName = n.getNameAsString();
             if (!predefinedMethodNames.contains(methodName)) {
                 System.out.println("Method name is not predefined: " + methodName);
-                // You can add more logic here, such as storing results, calculating scores, etc.
+
+                // Get the current class's info and add the method name
+                JavaClassInfo currentClassInfo = classInfoMap.get(n.findAncestor(ClassOrInterfaceDeclaration.class).get().getNameAsString());
+                if (currentClassInfo != null) {
+                    currentClassInfo.addMethodName(methodName);
+                }
             }
 
             // Retrieve method return type
@@ -67,7 +115,6 @@ public class JavaCodeAnalyzer {
                 String paramName = parameter.getNameAsString();
                 Type paramType = parameter.getType();
                 System.out.println("Parameter in method " + methodName + ": " + paramType + " " + paramName);
-                // You can add more logic here, such as storing results, calculating scores, etc.
             });
 
             super.visit(n, arg);
@@ -92,12 +139,17 @@ public class JavaCodeAnalyzer {
                 CompilationUnit compilationUnit = parseResult.getResult().get();
                 NamingConventionVisitor visitor = new NamingConventionVisitor();
                 compilationUnit.accept(visitor, null);
-                // You can add more visitors for additional checks
             } else {
                 System.err.println("Parsing failed for file: " + filePath);
                 parseResult.getProblems().forEach(System.err::println);
             }
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (RuntimeException e) {
+            System.err.println("Runtime exception during file processing: " + filePath);
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("Exception during file processing: " + filePath);
             e.printStackTrace();
         }
     }
@@ -105,6 +157,13 @@ public class JavaCodeAnalyzer {
     public static void main(String[] args) {
         String extractedFilesDirectory = "automated-judge-system/src/main/java/com/voidlings/submissions";
         analyzeCode(extractedFilesDirectory);
+
+        // Print information about classes
+        for (JavaClassInfo classInfo : classInfoMap.values()) {
+            System.out.println("Class: " + classInfo.getClassName());
+            System.out.println("Attributes: " + classInfo.getAttributeNames());
+            System.out.println("Methods: " + classInfo.getMethodNames());
+            System.out.println();
+        }
     }
 }
-
