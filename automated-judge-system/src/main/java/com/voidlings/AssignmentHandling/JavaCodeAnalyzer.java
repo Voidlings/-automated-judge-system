@@ -24,7 +24,7 @@ public class JavaCodeAnalyzer {
     static class JavaClassInfo {
         private String className;
         private List<String> attributeNames = new ArrayList<>();
-        private List<String> methodNames = new ArrayList<>();
+        private Map<String, MethodInfo> methodInfoMap = new HashMap<>();
 
         public JavaClassInfo(String className) {
             this.className = className;
@@ -38,85 +38,102 @@ public class JavaCodeAnalyzer {
             return attributeNames;
         }
 
-        public List<String> getMethodNames() {
-            return methodNames;
+        public Map<String, MethodInfo> getMethodInfoMap() {
+            return methodInfoMap;
         }
 
         public void addAttributeName(String attributeName) {
             this.attributeNames.add(attributeName);
         }
 
-        public void addMethodName(String methodName) {
-            this.methodNames.add(methodName);
+        public void addMethodName(String methodName, String returnType, List<ParameterInfo> parameters) {
+            MethodInfo methodInfo = new MethodInfo(methodName, returnType, parameters);
+            this.methodInfoMap.put(methodName, methodInfo);
+        }
+
+        static class MethodInfo {
+            private String methodName;
+            private String returnType;
+            private List<ParameterInfo> parameters;
+
+            public MethodInfo(String methodName, String returnType, List<ParameterInfo> parameters) {
+                this.methodName = methodName;
+                this.returnType = returnType;
+                this.parameters = parameters;
+            }
+
+            public String getMethodName() {
+                return methodName;
+            }
+
+            public String getReturnType() {
+                return returnType;
+            }
+
+            public List<ParameterInfo> getParameters() {
+                return parameters;
+            }
+        }
+
+        static class ParameterInfo {
+            private String paramName;
+            private String paramType;
+
+            public ParameterInfo(String paramName, String paramType) {
+                this.paramName = paramName;
+                this.paramType = paramType;
+            }
+
+            public String getParamName() {
+                return paramName;
+            }
+
+            public String getParamType() {
+                return paramType;
+            }
         }
     }
 
-    // Declare classInfoMap as a static field
     private static Map<String, JavaClassInfo> classInfoMap = new HashMap<>();
 
     static class NamingConventionVisitor extends VoidVisitorAdapter<Void> {
-        private List<String> predefinedClassNames = Arrays.asList("a", "b", "ClassC");
-        private List<String> predefinedMethodNames = Arrays.asList("methodA", "methodB", "methodC");
-        private List<String> predefinedAttributeNames = Arrays.asList("attributeA", "attributeB", "attributeC");
 
         @Override
         public void visit(ClassOrInterfaceDeclaration n, Void arg) {
-            // Check if class name is in the predefined list
             String className = n.getNameAsString();
-            if (!predefinedClassNames.contains(className)) {
-                System.out.println("Class name is not predefined: " + className);
+            JavaClassInfo classInfo = new JavaClassInfo(className);
+            classInfoMap.put(className, classInfo);
 
-                // Store information about the class
-                JavaClassInfo classInfo = new JavaClassInfo(className);
-                classInfoMap.put(className, classInfo);
-            }
-
-            // Visit field declarations (attributes)
             super.visit(n, arg);
         }
 
         @Override
         public void visit(FieldDeclaration n, Void arg) {
-            // Check if attribute name is in the predefined list
             String attributeName = n.getVariable(0).getNameAsString();
-            if (!predefinedAttributeNames.contains(attributeName)) {
-                System.out.println("Attribute name is not predefined: " + attributeName);
-
-                // Get the current class's info and add the attribute name
-                JavaClassInfo currentClassInfo = classInfoMap.get(n.findAncestor(ClassOrInterfaceDeclaration.class).get().getNameAsString());
-                if (currentClassInfo != null) {
-                    currentClassInfo.addAttributeName(attributeName);
-                }
+            JavaClassInfo currentClassInfo = classInfoMap.get(n.findAncestor(ClassOrInterfaceDeclaration.class).get().getNameAsString());
+            if (currentClassInfo != null) {
+                currentClassInfo.addAttributeName(attributeName);
             }
-
             super.visit(n, arg);
         }
 
         @Override
         public void visit(MethodDeclaration n, Void arg) {
-            // Check if method name is in the predefined list
             String methodName = n.getNameAsString();
-            if (!predefinedMethodNames.contains(methodName)) {
-                System.out.println("Method name is not predefined: " + methodName);
 
-                // Get the current class's info and add the method name
+                Type returnType = n.getType();
+                List<JavaClassInfo.ParameterInfo> parameters = new ArrayList<>();
+                n.getParameters().forEach(parameter -> {
+                    String paramName = parameter.getNameAsString();
+                    String paramType = parameter.getTypeAsString();
+                    parameters.add(new JavaClassInfo.ParameterInfo(paramName, paramType));
+                });
+
                 JavaClassInfo currentClassInfo = classInfoMap.get(n.findAncestor(ClassOrInterfaceDeclaration.class).get().getNameAsString());
                 if (currentClassInfo != null) {
-                    currentClassInfo.addMethodName(methodName);
+                    currentClassInfo.addMethodName(methodName, returnType.toString(), parameters);
                 }
-            }
-
-            // Retrieve method return type
-            Type returnType = n.getType();
-            System.out.println("Return type of method " + methodName + ": " + returnType);
-
-            // Retrieve method parameters
-            n.getParameters().forEach(parameter -> {
-                String paramName = parameter.getNameAsString();
-                Type paramType = parameter.getType();
-                System.out.println("Parameter in method " + methodName + ": " + paramType + " " + paramName);
-            });
-
+                
             super.visit(n, arg);
         }
     }
@@ -158,11 +175,23 @@ public class JavaCodeAnalyzer {
         String extractedFilesDirectory = "automated-judge-system/src/main/java/com/voidlings/submissions";
         analyzeCode(extractedFilesDirectory);
 
-        // Print information about classes
+        // Print information about classes, attributes, and methods
         for (JavaClassInfo classInfo : classInfoMap.values()) {
             System.out.println("Class: " + classInfo.getClassName());
             System.out.println("Attributes: " + classInfo.getAttributeNames());
-            System.out.println("Methods: " + classInfo.getMethodNames());
+
+            // Print information about methods
+            for (JavaClassInfo.MethodInfo methodInfo : classInfo.getMethodInfoMap().values()) {
+                System.out.println("Method: " + methodInfo.getMethodName());
+                System.out.println("  Return Type: " + methodInfo.getReturnType());
+
+                // Print information about method parameters
+                System.out.println("  Parameters:");
+                for (JavaClassInfo.ParameterInfo parameterInfo : methodInfo.getParameters()) {
+                    System.out.println("    " + parameterInfo.getParamType() + " " + parameterInfo.getParamName());
+                }
+            }
+
             System.out.println();
         }
     }

@@ -1,4 +1,4 @@
-package com.voidlings.submissions.Assignment 1;
+package com.voidlings.submissions.Assignment1;
 
 /**
 816032844
