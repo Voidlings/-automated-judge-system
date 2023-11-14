@@ -69,12 +69,12 @@ public class ZIPFileHandler implements FileHandler {
                     continue;
                 }
 
-                if (!entryName.endsWith(".java")) {
+             /*    if (!entryName.endsWith(".java")) {
                     // Skip non-Java files
                     System.out.println("Non-Java File Skipped: " + entryName);
                     continue;
                 }
-
+    */
                 File outputFile = new File(destinationPath, entryName);
 
                 if (!outputFile.getParentFile().exists()) {

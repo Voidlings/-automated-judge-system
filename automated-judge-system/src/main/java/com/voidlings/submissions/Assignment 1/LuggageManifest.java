@@ -1,12 +1,9 @@
+package com.voidlings.submissions.Assignment 1;
 /**
 816032844
  */
-
-package com.voidlings.submissions.Assignment1;
-
 import java.util.ArrayList;
 import java.util.Iterator;
-
 
 public class LuggageManifest
 {
