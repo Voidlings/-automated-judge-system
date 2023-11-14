@@ -1,13 +1,14 @@
 package com.voidlings.FileHandling;
+
 import java.io.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class ZIPFileHandler implements FileHandler{
+public class ZIPFileHandler implements FileHandler {
     private Folder submissionFolder;
 
-    public ZIPFileHandler(String folderName, String path){
-        submissionFolder= new Folder(folderName, path);
+    public ZIPFileHandler(String folderName, String path) {
+        submissionFolder = new Folder(folderName, path);
     }
 
     @Override
@@ -17,18 +18,18 @@ public class ZIPFileHandler implements FileHandler{
         if (!file.exists() || !file.isFile()) {
             return false;
         }
-        //Checks if the format of the file is zip
+        // Checks if the format of the file is zip
         path = path.toLowerCase();
 
-        if(path.endsWith(".zip"))
+        if (path.endsWith(".zip"))
             return true;
-        
+
         return false;
     }
 
     @Override
     public Boolean containsFileType(String filePath) {
-        //checks if the zip contains java files
+        // checks if the zip contains java files
         try (ZipInputStream zipIn = new ZipInputStream(new FileInputStream(filePath))) {
             ZipEntry entry;
             while ((entry = zipIn.getNextEntry()) != null) {
@@ -39,10 +40,10 @@ public class ZIPFileHandler implements FileHandler{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
+
         return false;
     }
-    
+
     @Override
     public Folder extractFiles(String zipFilePath, String destinationPath) {
         if (!containsFileType(zipFilePath)) {
@@ -61,6 +62,19 @@ public class ZIPFileHandler implements FileHandler{
             ZipEntry entry;
             while ((entry = zipIn.getNextEntry()) != null) {
                 String entryName = entry.getName();
+
+                if (entry.isDirectory()) {
+                    // Skip directories
+                    System.out.println("Directory Encountered: " + entryName);
+                    continue;
+                }
+
+                if (!entryName.endsWith(".java")) {
+                    // Skip non-Java files
+                    System.out.println("Non-Java File Skipped: " + entryName);
+                    continue;
+                }
+
                 File outputFile = new File(destinationPath, entryName);
 
                 if (!outputFile.getParentFile().exists()) {
@@ -68,55 +82,42 @@ public class ZIPFileHandler implements FileHandler{
                     outputFile.getParentFile().mkdirs();
                 }
 
-                if (!entry.isDirectory()) {
-                    // use array buffer to read entry
-                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                    byte[] buffer = new byte[4096];
-                    int bytesRead;
-                    while ((bytesRead = zipIn.read(buffer)) != -1) {
-                        bos.write(buffer, 0, bytesRead);
-                    }
+                // use array buffer to read entry
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                byte[] buffer = new byte[4096];
+                int bytesRead;
+                while ((bytesRead = zipIn.read(buffer)) != -1) {
+                    bos.write(buffer, 0, bytesRead);
+                }
 
-                    String content = new String(bos.toByteArray());// content for SubmissionFile
+                String content = new String(bos.toByteArray());// content for SubmissionFile
 
-                    if (entryName.endsWith(".java")) { //Only store java files on the Folder classes
+                if (entryName.contains("/")) {
+                    // If the entry is in a subdirectory, create nested folders
+                    String[] folders = entryName.split("/");
+                    Folder currentFolder = this.submissionFolder;
 
-                        // facilitate adding of folders and files to the main Folder instance;
-
-                        if (entryName.contains("/")) {
-                            // If the entry is in a subdirectory, create nested folders
-                            String[] folders = entryName.split("/");
-                            Folder currentFolder = this.submissionFolder;
-
-                            for (int i = 0; i < folders.length - 1; i++) {
-                                // Check if the folder already exists
-                                FileComponent existingComponent = currentFolder.getComponentByName(folders[i]);
-                                if (existingComponent == null) {
-                                    currentFolder.addComponent(new Folder(folders[i], (destinationPath + "/"+ folders[i])));
-                                    existingComponent = currentFolder.getComponentByName(folders[i]);
-                                }
-                                currentFolder = (Folder) existingComponent;
-                            }
-                            currentFolder.addComponent(new JavaFile(folders[folders.length - 1], content, (destinationPath + "/" + entryName)));
-
-                            // Write the content to the outputFile
-                            try (FileOutputStream fos = new FileOutputStream(outputFile)) {
-                                fos.write(("package com.voidlings.submissions." + currentFolder.getName() + ";\n")
-                                        .getBytes());
-                                fos.write(bos.toByteArray());
-                            }
-                        } else {
-                            // Otherwise, add file directly to submissionFolder
-                            submissionFolder.addComponent(new JavaFile(entryName, content, (destinationPath + "/" + entryName)));
+                    for (int i = 0; i < folders.length - 1; i++) {
+                        // Check if the folder already exists
+                        FileComponent existingComponent = currentFolder.getComponentByName(folders[i]);
+                        if (existingComponent == null) {
+                            currentFolder.addComponent(new Folder(folders[i], (destinationPath + "/" + folders[i])));
+                            existingComponent = currentFolder.getComponentByName(folders[i]);
                         }
+                        currentFolder = (Folder) existingComponent;
                     }
-                    else{
-                        try (FileOutputStream fos = new FileOutputStream(outputFile)) {
-                            fos.write(bos.toByteArray());
-                        }
+                    currentFolder.addComponent(
+                            new JavaFile(folders[folders.length - 1], content, (destinationPath + "/" + entryName)));
+
+                    // Write the content to the outputFile
+                    try (FileOutputStream fos = new FileOutputStream(outputFile)) {
+                        fos.write(("package com.voidlings.submissions." + currentFolder.getName() + ";\n").getBytes());
+                        fos.write(bos.toByteArray());
                     }
                 } else {
-                    System.out.println("Directory Encountered");
+                    // Otherwise, add file directly to submissionFolder
+                    submissionFolder
+                            .addComponent(new JavaFile(entryName, content, (destinationPath + "/" + entryName)));
                 }
             }
         } catch (IOException e) {
@@ -130,5 +131,5 @@ public class ZIPFileHandler implements FileHandler{
     public Folder getFolder() {
         return this.submissionFolder;
     }
-    
+
 }

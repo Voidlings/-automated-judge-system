@@ -5,6 +5,20 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "JavaCodeAnalyzer",
+            "request": "launch",
+            "mainClass": "com.voidlings.AssignmentHandling.JavaCodeAnalyzer",
+            "projectName": "automated-judge-system"
+        },
+        {
+            "type": "java",
+            "name": "parser",
+            "request": "launch",
+            "mainClass": "com.voidlings.AssignmentHandling.parser",
+            "projectName": "automated-judge-system"
+        },
+        {
             "name": "Java",
             "type": "java",
             "request": "launch",
