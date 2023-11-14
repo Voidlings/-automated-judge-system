@@ -69,6 +69,11 @@ public class ZIPFileHandler implements FileHandler {
                     continue;
                 }
 
+                if (entryName.contains("__MACOSX")){
+                    // Skip MacOSX folder
+                    continue;
+                }
+
              /*    if (!entryName.endsWith(".java")) {
                     // Skip non-Java files
                     System.out.println("Non-Java File Skipped: " + entryName);
@@ -92,7 +97,8 @@ public class ZIPFileHandler implements FileHandler {
 
                 String content = new String(bos.toByteArray());// content for SubmissionFile
 
-                if (entryName.contains("/")) {
+                if (entryName.contains("/") && !entryName.contains("__MACOSX") && !entryName.endsWith(".class")) { 
+                    // Do not include MACOSX file.
                     // If the entry is in a subdirectory, create nested folders
                     String[] folders = entryName.split("/");
                     Folder currentFolder = this.submissionFolder;
@@ -111,7 +117,7 @@ public class ZIPFileHandler implements FileHandler {
 
                     // Write the content to the outputFile
                     try (FileOutputStream fos = new FileOutputStream(outputFile)) {
-                        fos.write(("package com.voidlings.submissions." + currentFolder.getName() + ";\n").getBytes());
+                        fos.write(("package com.voidlings.Submissions." + currentFolder.getName() + ";\n").getBytes());
                         fos.write(bos.toByteArray());
                     }
                 } else {

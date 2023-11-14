@@ -1,4 +1,4 @@
-package Stratergy;
+package Strategy;
 
 import com.voidlings.FileHandling.Folder;
 

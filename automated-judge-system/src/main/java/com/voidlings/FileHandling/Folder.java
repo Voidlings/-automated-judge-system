@@ -55,8 +55,17 @@ public class Folder implements FileComponent{
     public List<JavaFile> getJavaFiles() {
         List<JavaFile> javaFiles = new ArrayList<>();
         for (FileComponent component : allComponents) {
-            if (!component.isFolder()) {
+            if (!component.isFolder() && component.getName().endsWith(".java")) {
                 javaFiles.add((JavaFile) component);
+                // System.out.println(component.getName());
+            }
+            if (component.isFolder()){
+                Folder f = (Folder) component;
+                
+                for (JavaFile j : f.getJavaFiles()){
+                    // System.out.println(j.getName());
+                    javaFiles.add(j);
+                }
             }
         }
         return javaFiles;

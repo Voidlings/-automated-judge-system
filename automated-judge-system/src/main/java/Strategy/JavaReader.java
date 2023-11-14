@@ -1,4 +1,4 @@
-package Stratergy;
+package Strategy;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;

@@ -1,14 +1,19 @@
 package com.voidlings;
 
 import java.io.File;
+import java.util.List;
+
+import com.voidlings.FileHandling.FileComponent;
 import com.voidlings.FileHandling.Folder;
+import com.voidlings.FileHandling.JavaFile;
 import com.voidlings.FileHandling.ZIPFileHandler;
 
 public class App {
     public static void main(String[] args) {
-        String directoryPath = "/workspaces/-automated-judge-system/automated-judge-system/src/main/java/com/voidlings/AssignmentSubzip";
+        // Absolute path:
+        String directoryPath = "/Users/jasmine/Documents/GitHub/-automated-judge-system/automated-judge-system/src/main/java/com/voidlings/AssignmentSubzip";
 
-        String destinationPath = "submissions";
+        String destinationPath = "Submissions";
 
         File directory = new File(directoryPath);
 
@@ -27,13 +32,34 @@ public class App {
                         if ((allSubmissions != null) && (allSubmissions.getFileComponents() != null)
                                 && (allSubmissions.getFolderList() != null)) {
                             // Uncomment to test hierarchy of folder and files
+                            
                             /*
-                             * for (Folder folder : allSubmissions.getFolderList()) {
-                             * System.out.println(folder.getName()); for(JavaFile f:
-                             * folder.getJavaFiles())
-                             * System.out.println(folder.getName() + ": " + f.getName()); }
-                             */
+                            for (Folder folder : allSubmissions.getFolderList()) {
+                                System.out.println(folder.getName());
+                                for(JavaFile f: folder.getJavaFiles()){
+                                System.out.println(folder.getName() + ": " + f.getName()); 
+                                }
+                            }
+                            */
+
                             System.out.println("Extraction successful for file: " + file.getName());
+
+                            /*
+                            for (Folder folder : allSubmissions.getFolderList()) {
+                                System.out.println(folder.getName());
+                                for(JavaFile f: folder.getJavaFiles()){
+                                System.out.println(folder.getName() + ": " + f.getName()); 
+                                }
+                            }
+                            */
+
+                            /* Testing on Mac - Java files correctly put into collection.
+                            for (JavaFile j : allSubmissions.getJavaFiles()){
+                               System.out.println(j.getName());
+                            }
+                            */
+                            
+
                         } else {
                             System.err.println("Extraction failed for file: " + file.getName() +
                                     ". Ensure that the zip contains folder submissions with .java files");
