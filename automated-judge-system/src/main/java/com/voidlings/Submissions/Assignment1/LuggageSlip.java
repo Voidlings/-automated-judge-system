@@ -1,0 +1,64 @@
+package com.voidlings.submissions.Assignment1;
+// Student ID: 816033642
+
+public class LuggageSlip{
+    private Passenger owner;
+    private static int luggageSlipIDCounter = 1;
+    private String luggageSlipID;
+    private String label;
+    
+    public LuggageSlip(Passenger p, Flight f){
+        // Initialize all state, label as an empty string.
+        owner = p;
+        luggageSlipID = f.getFlightNumber() + "_" + p.getLastName() + "_" + luggageSlipIDCounter;
+        label = "0.0";
+        luggageSlipIDCounter++;
+    }
+    
+    public LuggageSlip(Passenger p, Flight f, String label){
+        // Initialize all state, label as an empty string.
+        owner = p;
+        this.label = label;
+        luggageSlipID = f.getFlightNumber() + "_" + p.getLastName() + "_" + luggageSlipIDCounter;
+        luggageSlipIDCounter++;
+    }
+    
+    public Passenger getOwner(){
+        return owner;
+    }
+    
+    public int getLuggageSlipIDCounter(){
+        return luggageSlipIDCounter;
+    }
+    
+    public String getLuggageSlipID(){
+        return luggageSlipID;
+    }
+    
+    public String getLabel(){
+        return label;
+    }
+    
+    public boolean hasOwner(String passportNumber){
+        if (owner.getPassportNumber().equals(passportNumber)){
+            return true;
+        }
+        return false;
+    }
+    
+    public String toString(){
+        return "Luggage Slip ID: " + luggageSlipID +
+                "\nPassport Number: " + owner.getPassportNumber() +
+                "\nName: " + owner.getFirstName().charAt(0) + "." + owner.getLastName().toUpperCase() +
+                "\nNumLuggage: " + owner.getNumLuggage()+
+                "\nClass: " + owner.getCabinClass() + 
+                "\nExcess cost: $" + label + "\n";
+    }
+    
+    public boolean equals(String passNum1, String passNum2){
+        if (passNum1 == passNum2){
+            return true;
+        }
+        return false;
+    }
+}

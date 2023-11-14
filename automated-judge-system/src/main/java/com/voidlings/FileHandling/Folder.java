@@ -40,6 +40,7 @@ public class Folder implements FileComponent{
     // Method to check if a file exists in the folder
     public Boolean fileExists(String name) {
         for (FileComponent file : allComponents) {
+            System.out.println(file.getName());
             if (file.getName().equals(name)) {
                 return true;
             }
@@ -89,6 +90,21 @@ public class Folder implements FileComponent{
             }
         }
         return null;
+    }
+
+    public Boolean fileExistsRevised(String name){
+        for (Folder folder : this.getFolderList()) {
+            //System.out.println(folder.getName());
+            for(JavaFile f: folder.getJavaFiles()){
+                //System.out.println(folder.getName() + ": " + f.getName());
+                if (f.getName().equals(name)){
+                    System.out.println(name + " exists." + "\n");
+                    return true;
+                }
+            }
+        }
+        //System.out.println(name + " not found.");
+        return false;
     }
 
     @Override
