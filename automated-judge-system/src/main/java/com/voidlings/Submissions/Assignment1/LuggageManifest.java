@@ -1,97 +1,147 @@
 package com.voidlings.Submissions.Assignment1;
-/**
-816032844
- */
+// Student ID: 816033642
+
 import java.util.ArrayList;
-import java.util.Iterator;
-
-public class LuggageManifest
-{
-    // instance variables - replace the example below with your own
-    private ArrayList<LuggageSlip> slips;
-
-   
-    /**
-     * Constructor for objects of class LuggageManifest
-     */
-   
-    public LuggageManifest()
-    {
+public class LuggageManifest{
+    ArrayList<LuggageSlip> slips;
+    
+    public LuggageManifest(){
+        // Initialize the collection.
         slips = new ArrayList<LuggageSlip>();
-       
-        // initialise instance variables
-       
-    }
-
-    /**
-     * An example of a method - replace this comment with your own
-     *
-     * @param  y  a sample parameter for a method
-     * @return    the sum of x and y
-     */
-    public String addLuggage(Passenger p, Flight f)
-    {
-     double x=getExcessLuggageCost(p.getNumLuggage(), f.getAllowedLuggage(p.getCabinClass()));   
-         //PP NO. TA890789 NAME: J.BEAN NUMLUGGAGE: 3 CLASS: E   
-        // PP NO. TA890789 NAME: J.BEAN NUMLUGGAGE: 2 CLASS: P Pieces Added: (2). Excess Cost: $35
-        String out ="";
-        if(p.getNumLuggage()==0)
-    {
-        out =p.toString() + " No Luggage to add";
-        return out; 
-       // out= p.toString()+" Pieces added:";
-        //out//String Label="No Luggage to add";
-        //slips.add(new LuggageSlip (p,f,Label));
-    }
-    String Label = "";
-    if (x!=0){
-           Label = String.valueOf(x);
-       }
-    for(int i=0; i<p.getNumLuggage(); i++)
-        {
-          //  out= ;  
-            slips.add(new LuggageSlip (p,f,Label));
-           // return ;
-        }
-        return p.toString() + " Pieces Added:"+"(" + p.getNumLuggage() +")" +" Excesss Cost:" + x; 
-    }
-   
-    public double getExcessLuggageCost( int numPieces, int numAllowedPieces)
-    {
-        if(numPieces <numAllowedPieces)
-        {
-            return 0;
-        }
-        
-        double Excess=(numPieces - numAllowedPieces) * 35 ;
-       
-        return Excess;
-       
-    }
-   
-    public String getExcessLuggageCostByPassenger(String passportNumber)
-    { String str="";
-        for (LuggageSlip element : slips)
-      {
-         if (element.getOwner().getPassportNumber().equals(passportNumber) ){
-             if(!element.getLabel().equals(""))
-             {str= element.getLabel();
-                }
-         }
-        // else
-       //  return "";
-      }
-      return str;
-      
     }
     
-    public String toString()
-    {
-        String str="";
-        for(LuggageSlip element: slips)
-        {
-            str= str + "\n"+ element.toString()+"\n" ; 
+    public String addLuggage(Passenger p, Flight f){
+        // Passenger and Flight are input here from Flight, and handled here.
+        // Add one or more luggageSlip objects to the manifest based on numLuggage.
+        // How many pieces are allowed based on class?
+        int numAllowed = 0;
+        double excessCost = 0;
+        
+        // Class F
+        if (p.getCabinClass() == 'F'){
+            numAllowed = 3;
         }
-        return str;    
+        
+        // Class B
+        if (p.getCabinClass() == 'B'){
+            numAllowed = 2;
+        }
+        
+        // Class P
+        if (p.getCabinClass() == 'P'){
+            numAllowed = 1;
+        }
+        
+        // Class E
+        if (p.getCabinClass() == 'E'){
+            numAllowed = 0;
+        }
+        
+        if (p.getNumLuggage() > 0){
+            // As long as they have one or more pieces of luggage, do:
+            for (int i = 0; i < p.getNumLuggage(); i++){
+                // Excess cost.
+                excessCost = getExcessLuggageCost(p.getNumLuggage(), numAllowed);
+                String label = Double.toString(excessCost);
+                
+                // Add slips.
+                // Label is generated if excess cost calculated.
+                if (excessCost == 0){
+                    LuggageSlip slip = new LuggageSlip(p, f);
+                    slips.add(slip);
+                    System.out.println(slip + "\n");
+                } 
+                
+                else {
+                    LuggageSlip slip = new LuggageSlip(p, f, label);
+                    slips.add(slip);
+                    System.out.println(slip + "\n");
+                }
+            }
+        }
+        
+        if (p.getNumLuggage() == 0){
+            System.out.println(p.toString() + "\n" + "No Luggage to add.");
+            return("");
+        }
+        
+        // Display total excess cost at the end:
+        System.out.println("Pieces added: " + p.getNumLuggage() + "\n" + 
+                           getExcessLuggageCostByPassenger(p.getPassportNumber()));
+        System.out.println("Luggage Added Successfully.");
+        return ("");
+    }
+    
+    public double getExcessLuggageCost(int numPieces, int numAllowedPieces){
+        double excessCost = 0;
+        
+        if (numAllowedPieces > numPieces || numAllowedPieces == numPieces){
+            excessCost = 0;
+        } 
+        
+        if (numAllowedPieces < numPieces){
+            excessCost = 35 * (numPieces - numAllowedPieces);
+        }
+        
+        return excessCost;
+    }
+    
+    public String getExcessLuggageCostByPassenger(String passportNumber){
+        // Access the ArrayList and identify the passenger with that passport number.
+        // Check the slips for that passenger.
+        
+        // Initialized to the first one but it will change.
+        Passenger p;
+        int numAllowed = 0;
+        double excessCost = 0;
+        int numLuggage = 0;
+        
+        for(int i = 0; i < slips.size(); i++){
+            if (slips.get(i).getOwner().getPassportNumber().equals(passportNumber)){
+                p = slips.get(i).getOwner();
+                numLuggage = p.getNumLuggage();
+                
+                // Class F
+                if (p.getCabinClass() == 'F'){
+                    numAllowed = 3;
+                }
+                
+                // Class B
+                if (p.getCabinClass() == 'B'){
+                    numAllowed = 2;
+                }
+                
+                // Class P
+                if (p.getCabinClass() == 'P'){
+                    numAllowed = 1;
+                }
+                
+                // Class E
+                if (p.getCabinClass() == 'E'){
+                    numAllowed = 0;
+                }
+            }
+        }
+        
+        if (numAllowed > numLuggage || numAllowed == numLuggage){
+            excessCost = 0;
+            return ("No excess cost.");
+        } 
+        
+        if (numAllowed < numLuggage){
+            excessCost = 35 * (numLuggage - numAllowed);
+        }
+        
+        return ("Excess Cost: $" + excessCost);
+    }
+    
+    public String toString(){
+        for (int i = 0; i < slips.size(); i++){
+            // Traverse and print.
+            LuggageSlip slip = slips.get(i);
+            System.out.println(slip.toString() + "\n");
+        }
+        
+        return ("");
     }
 }

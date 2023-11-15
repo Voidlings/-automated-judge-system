@@ -1,116 +1,100 @@
 package com.voidlings.Submissions.Assignment1;
-import java.time.LocalDateTime;
+// Student ID: 816033642
 
-/**
-816032844
- */
-public class Flight 
-{
+import java.time.LocalDateTime;
+public class Flight{
+    // Variable Declarations
     private String flightNo;
     private String destination;
     private String origin;
     private LocalDateTime flightDate;
-    private LuggageManifest manifest;
+    LuggageManifest manifest = new LuggageManifest();
     
-    
-    /**
-     * Constructor for objects of class Flight
-     */
-    public Flight(String flightNo,String destination, String origin, LocalDateTime flightDate)
-    {
-        this.flightNo=flightNo;
-        this.destination=destination;
-        this.origin=origin;
-        this.flightDate=flightDate;        
-        manifest= new LuggageManifest(); 
+    public Flight(String flightNo, String destination, String origin, LocalDateTime flightDate){
+        // Initializes variables and creates new LM object.
+        this.flightNo = flightNo;
+        this.destination = destination;
+        this.origin = origin;
+        this.flightDate = flightDate;
     }
-
-   public String getFlightNo()
-    {
-        // put your code here
+    
+    public String toString(){
+        return "Flight Number: " + flightNo +
+                "\nDestination: " + destination +
+                "\nOrigin: " + origin +
+                "\nDate: " + flightDate;
+    }
+    
+    public String getFlightNumber(){
         return flightNo;
-
     }
     
-   public String getDestination()
-    {
-        // put your code here
+    public String getDestination(){
         return destination;
-
     }
     
-   public String getOrigin()
-    {
-        // put your code here
+    public String getOrigin(){
         return origin;
-
     }
     
-   public LocalDateTime getFlightDate()
-    {
-        // put your code here
+    public LocalDateTime getFlightDate(){
         return flightDate;
-
     }
     
-   public LuggageManifest getManifest()
-    {
-        // put your code here
+    public LuggageManifest getLuggageManifest(){
         return manifest;
-
     }
-   public String checkInLuggage(Passenger p)
-   {
-       if(getFlightNo()==p.getFlightNo())
-       {
-         return manifest.addLuggage(p,this);
-           
-       }
-       
-       else
-       {
-           String output="Invalid Flight";
-           return output; 
+    
+    public String checkInLuggage(Passenger p){
+        // Validate if passenger can check in luggage for this particular flight.
+        // Previously accidentally did this in main - migrate code.
+        // If the flight number in the passenger object == this flight number, then true.
+        boolean correctFlight = false;
+        
+        if (p.getFlightNo().equals(this.getFlightNumber())){
+            // If correct, then check in their luggage to the manifest.
+            // Use the addLuggage method.
+            // Return string from addLugagge method.
+            manifest.addLuggage(p, this);
+            
+            System.out.println("Successfully Checked In.\n");
         }
-       
-   }
-  
-   public static int getAllowedLuggage(char cabinClass)
-   {
-       if(cabinClass=='F')
-       {  
-           return 3;
-       }
-       
-       if(cabinClass=='B')
-       {   
-           return 2;
-       }
-       
-       if(cabinClass=='P')
-       {
-           
-           return 1;
-       }
-       
-       else 
-       return 0;
-       
-     //  if(cabinClass=='E')
-       //{    int r=0;
-         //  return r;
-       //}
+        
+        else if (p.getFlightNo() != this.getFlightNumber()){
+            // If passenger flightNo does not match this flight number, error message.
+            System.out.println("Invalid flight.\n");
+        }
+        
+        return ("");
     }
     
-   public String printLuggaeManifest()
-   {
-      return getManifest().toString();
+    public int getAllowedLuggage(char cabinClass){
+        int numAllowed = 0;
+        
+        // Class F
+        if (cabinClass == 'F'){
+            numAllowed = 3;
+        }
+        
+        // Class B
+        if (cabinClass == 'B'){
+            numAllowed = 2;
+        }
+        
+        // Class P
+        if (cabinClass == 'P'){
+            numAllowed = 1;
+        }
+        
+        // Class E
+        if (cabinClass == 'E'){
+            numAllowed = 0;
+        }
+        
+        return numAllowed;
     }
     
-   public String toString()
-   {
-       String output= getFlightNo()+ " Destination:" +getDestination() + " Origin:"+getOrigin()+" "+getFlightDate();
-       return output; 
+    public String printLuggageManifest(){
+        return (manifest.toString());
     }
-
 }

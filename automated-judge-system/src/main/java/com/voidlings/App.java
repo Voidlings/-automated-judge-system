@@ -1,18 +1,22 @@
 package com.voidlings;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+import com.voidlings.AssignmentHandling.JavaClassInfo;
 import com.voidlings.AssignmentHandling.JavaCodeAnalyzer;
 import com.voidlings.FileHandling.FileComponent;
 import com.voidlings.FileHandling.Folder;
 import com.voidlings.FileHandling.JavaFile;
 import com.voidlings.FileHandling.ZIPFileHandler;
+import com.voidlings.TestCases.AttributeTestCase;
 
 public class App {
     public static void main(String[] args) {
         // Absolute path:
-        String directoryPath = "/workspaces/-automated-judge-system/automated-judge-system/src/main/java/com/voidlings/TestZip";
+        String directoryPath = "/Users/jasmine/Documents/GitHub/-automated-judge-system/automated-judge-system/src/main/java/com/voidlings/AssignmentSubzip";
 
         String destinationPath = "Submissions";
 
@@ -47,7 +51,37 @@ public class App {
 
                             // Get attributes and methods and put into the proper classes for evaluation process.
                             // Analyze the submission.
-                            JavaCodeAnalyzer.processSubmissionFiles("/workspaces/-automated-judge-system/automated-judge-system/src/main/java/com/voidlings/Submissions/Assignment1");       
+                            List <JavaClassInfo> classes = JavaCodeAnalyzer.processSubmissionFiles("/Users/jasmine/Documents/GitHub/-automated-judge-system/automated-judge-system/src/main/java/com/voidlings/Submissions");
+                            
+                            /* Successfully extracted class information
+                            for (JavaClassInfo j : classes){
+                                System.out.println("Class Name: " + j.getClassName());
+                                System.out.println("Attributes: ");
+
+                                for (String a : j.getAttributeNames()){
+                                    System.out.println("\t\t" + a.toString());
+                                }
+                                System.out.println("\n");
+                            }
+                            */
+
+                            // Testing Pilot
+                            System.out.println("\n" + "Testing");
+                            // In another class, compare attributes to spec and come up with a grade.
+                            String [] sampleAttr = {"flightNo", "destination", "origin", "flightDate", "manifest"};
+
+                            List <String> sampleAttrSpec = new ArrayList<String>();
+                            for (String s : sampleAttr){
+                                sampleAttrSpec.add(s);
+                            }
+
+                            // For the Flight class.
+                            AttributeTestCase t = new AttributeTestCase();
+                            int attributeGrade = t.attributeGrading(classes.get(1).getAttributeNames(), sampleAttrSpec);
+                            System.out.println("The attribute grade is: " + attributeGrade + "/" + sampleAttrSpec.size());
+
+                            // Export that grade to PDF.
+                            // The overview will give comments based on the grade received - good, very good, fair, etc.
                         
                         } else {
                             System.err.println("Extraction failed for file: " + file.getName() +

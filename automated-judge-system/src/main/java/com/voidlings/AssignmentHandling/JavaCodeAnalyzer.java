@@ -14,85 +14,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class JavaCodeAnalyzer {
 
-    static class JavaClassInfo {
-        private String className;
-        private List<String> attributeNames = new ArrayList<>();
-        private Map<String, MethodInfo> methodInfoMap = new HashMap<>();
 
-        public JavaClassInfo(String className) {
-            this.className = className;
-        }
-
-        public String getClassName() {
-            return className;
-        }
-
-        public List<String> getAttributeNames() {
-            return attributeNames;
-        }
-
-        public Map<String, MethodInfo> getMethodInfoMap() {
-            return methodInfoMap;
-        }
-
-        public void addAttributeName(String attributeName) {
-            this.attributeNames.add(attributeName);
-        }
-
-        public void addMethodName(String methodName, String returnType, List<ParameterInfo> parameters) {
-            MethodInfo methodInfo = new MethodInfo(methodName, returnType, parameters);
-            this.methodInfoMap.put(methodName, methodInfo);
-        }
-
-        static class MethodInfo {
-            private String methodName;
-            private String returnType;
-            private List<ParameterInfo> parameters;
-
-            public MethodInfo(String methodName, String returnType, List<ParameterInfo> parameters) {
-                this.methodName = methodName;
-                this.returnType = returnType;
-                this.parameters = parameters;
-            }
-
-            public String getMethodName() {
-                return methodName;
-            }
-
-            public String getReturnType() {
-                return returnType;
-            }
-
-            public List<ParameterInfo> getParameters() {
-                return parameters;
-            }
-        }
-
-        static class ParameterInfo {
-            private String paramName;
-            private String paramType;
-
-            public ParameterInfo(String paramName, String paramType) {
-                this.paramName = paramName;
-                this.paramType = paramType;
-            }
-
-            public String getParamName() {
-                return paramName;
-            }
-
-            public String getParamType() {
-                return paramType;
-            }
-        }
-    }
 
     private static Map<String, JavaClassInfo> classInfoMap = new HashMap<>();
 
@@ -171,19 +99,20 @@ public class JavaCodeAnalyzer {
         }
     }
 
-    public static void processSubmissionFiles(String extractedFilesDirectory) {
+    public static ArrayList<JavaClassInfo> processSubmissionFiles(String extractedFilesDirectory) {
         analyzeCode(extractedFilesDirectory);
-
-        List<AssignmentAttribute> attributes = new ArrayList<>();
-        List<AssignmentMethod> methods = new ArrayList<>();
+        ArrayList <JavaClassInfo> classes = new ArrayList<JavaClassInfo>();
 
         for (JavaClassInfo classInfo : classInfoMap.values()) {
+            // Populate list to return, all classes plus info.
+            // Optional: format in another object type before making final list.
+            classes.add(classInfo);
+            /*
             System.out.println("Class: " + classInfo.getClassName());
 
             System.out.println("Attributes: " + classInfo.getAttributeNames());
             for (String attr : classInfo.getAttributeNames()) {
                 AssignmentAttribute newAttribute = new AssignmentAttribute(attr, "", "private", "");
-                attributes.add(newAttribute);
             }
 
             for (JavaClassInfo.MethodInfo methodInfo : classInfo.getMethodInfoMap().values()) {
@@ -197,7 +126,9 @@ public class JavaCodeAnalyzer {
             }
 
             System.out.println();
+            */
         }
+        return classes;
     }
 
     public static void main(String[] args) {
