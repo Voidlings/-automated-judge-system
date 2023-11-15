@@ -3,6 +3,7 @@ package com.voidlings;
 import java.io.File;
 import java.util.List;
 
+import com.voidlings.AssignmentHandling.JavaCodeAnalyzer;
 import com.voidlings.FileHandling.FileComponent;
 import com.voidlings.FileHandling.Folder;
 import com.voidlings.FileHandling.JavaFile;
@@ -44,21 +45,9 @@ public class App {
 
                             System.out.println("Extraction successful for file: " + file.getName());
 
-                            /*
-                            for (Folder folder : allSubmissions.getFolderList()) {
-                                System.out.println(folder.getName());
-                                for(JavaFile f: folder.getJavaFiles()){
-                                System.out.println(folder.getName() + ": " + f.getName()); 
-                                }
-                            }
-                            */
-
-                            /* Testing on Mac - Java files correctly put into collection.
-                            for (JavaFile j : allSubmissions.getJavaFiles()){
-                               System.out.println(j.getName());
-                            }
-                            */
-                            
+                            // Get attributes and methods and put into the proper classes for evaluation process.
+                            // Analyze the submission.
+                            JavaCodeAnalyzer.analyzeCode("/Users/jasmine/Documents/GitHub/-automated-judge-system/automated-judge-system/src/main/java/com/voidlings/Submissions");       
 
                         } else {
                             System.err.println("Extraction failed for file: " + file.getName() +

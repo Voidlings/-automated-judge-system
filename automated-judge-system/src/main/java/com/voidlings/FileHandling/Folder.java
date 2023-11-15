@@ -100,6 +100,16 @@ public class Folder implements FileComponent{
         return null;
     }
 
+    // New Method
+    public JavaFile getJavaFileByName(String name) {
+        for (JavaFile javaFile : this.getJavaFiles()) {
+            if (javaFile.getName().equals(name)) {
+                return javaFile;
+            }
+        }
+        return null;
+    }
+
     @Override
     public void setName(String name) {
         this.name= name;
