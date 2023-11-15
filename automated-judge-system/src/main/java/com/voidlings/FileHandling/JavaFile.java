@@ -1,8 +1,6 @@
 package com.voidlings.FileHandling;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.File;
-import java.io.FileNotFoundException;
 
 public class JavaFile implements FileComponent{
     private String name;
