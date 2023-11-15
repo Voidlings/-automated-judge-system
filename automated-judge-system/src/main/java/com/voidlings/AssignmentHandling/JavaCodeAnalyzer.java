@@ -171,36 +171,25 @@ public class JavaCodeAnalyzer {
         }
     }
 
-    public static void main(String[] args) {
-        String extractedFilesDirectory = "automated-judge-system/src/main/java/com/voidlings/Submissions";
+    public static void processSubmissionFiles(String extractedFilesDirectory) {
         analyzeCode(extractedFilesDirectory);
 
-        // Run App before running this.
-
-        // These will be used to make the various assignmentClass objects.
-        // Note that as some information to make these objects weren't extracted (e.g. method string, attribute modifier) either the AssignmentAttribute and AssignmentMethod classes will have to change, or this extracting method will have to be changed.
         List<AssignmentAttribute> attributes = new ArrayList<>();
         List<AssignmentMethod> methods = new ArrayList<>();
 
-        // Print information about classes, attributes, and methods
         for (JavaClassInfo classInfo : classInfoMap.values()) {
             System.out.println("Class: " + classInfo.getClassName());
 
             System.out.println("Attributes: " + classInfo.getAttributeNames());
-            // Format attributes and populate List.
-            for (String attr : classInfo.getAttributeNames()){
-                // Unfortunately this extraction method does not give the modifier, type and variableType.
+            for (String attr : classInfo.getAttributeNames()) {
                 AssignmentAttribute newAttribute = new AssignmentAttribute(attr, "", "private", "");
                 attributes.add(newAttribute);
             }
 
-            // Print information about methods.
             for (JavaClassInfo.MethodInfo methodInfo : classInfo.getMethodInfoMap().values()) {
                 System.out.println("Method: " + methodInfo.getMethodName());
                 System.out.println("  Return Type: " + methodInfo.getReturnType());
-                // Problem, this method of extracting method data does not include the output and the method string itself which is used in the creation of an AssignmentMethod variable.
 
-                // Print information about method parameters
                 System.out.println("  Parameters:");
                 for (JavaClassInfo.ParameterInfo parameterInfo : methodInfo.getParameters()) {
                     System.out.println("    " + parameterInfo.getParamType() + " " + parameterInfo.getParamName());
@@ -209,7 +198,12 @@ public class JavaCodeAnalyzer {
 
             System.out.println();
         }
+    }
 
+    public static void main(String[] args) {
+    String extractedFilesDirectory = "automated-judge-system/src/main/java/com/voidlings/Submissions";
+    processSubmissionFiles(extractedFilesDirectory);
     }
 
 }
+

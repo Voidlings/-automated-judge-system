@@ -1,0 +1,7 @@
+package com.voidlings.Submissions.Assignment1;
+BWIA_1121, Paris, Port_of_Spain
+BWIA_2112, Wakanda, NeverNeverLand
+BWIA _404, Pandora, Atlantis
+BWIA_911,Melbourne, Nimo
+BWIA_200, Berlin, Oslo
+
