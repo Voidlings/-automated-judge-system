@@ -2,11 +2,13 @@ package com.voidlings;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 import com.voidlings.AssignmentHandling.JavaClassInfo;
 import com.voidlings.AssignmentHandling.JavaCodeAnalyzer;
+import com.voidlings.AssignmentHandling.MethodInfo;
 import com.voidlings.FileHandling.FileComponent;
 import com.voidlings.FileHandling.Folder;
 import com.voidlings.FileHandling.JavaFile;
@@ -65,20 +67,68 @@ public class App {
                             }
                             */
 
-                            // Testing Pilot
+                            // Test Pilot
+                            // Manually generate spec sheet and test if attributes are present.
                             System.out.println("\n" + "Testing");
                             // In another class, compare attributes to spec and come up with a grade.
-                            String [] sampleAttr = {"flightNo", "destination", "origin", "flightDate", "manifest"};
+                            List<ArrayList> specs = new ArrayList <ArrayList> ();
 
-                            List <String> sampleAttrSpec = new ArrayList<String>();
-                            for (String s : sampleAttr){
-                                sampleAttrSpec.add(s);
+                            // LuggageManagementSystem Class
+                            String [] s1 = {};
+                            ArrayList a1 = new ArrayList<>(Arrays.asList(s1));
+                            specs.add(a1);
+
+                            // Flight class
+                            String [] s2 = {"flightNo", "destination", "origin", "flightDate", "manifest"};
+                            ArrayList a2 = new ArrayList<>(Arrays.asList(s2));
+                            specs.add(a2);
+
+                            // LuggageSlip class
+                            String [] s3 = {"owner", "luggageSlipIDCounter", "luggageSlipID", "label"};
+                            ArrayList a3 = new ArrayList<>(Arrays.asList(s3));
+                            specs.add(a3);
+
+                            // Passenger Class
+                            String [] s4 = {"passportNumber", "flightNo", "firstName", "lastName", "numLuggage", "cabinClass"};
+                            ArrayList a4 = new ArrayList<>(Arrays.asList(s4));
+                            specs.add(a4);
+
+                            // LuggageManifest Class
+                            String [] s5 = {"slips"};
+                            ArrayList a5 = new ArrayList<>(Arrays.asList(s5));
+                            specs.add(a5);
+
+                            // Make a method that goes through all the classes and marks to suit.
+                            // Loop for each class, get spec, get assignment stuff and generate aggregate score.
+                            AttributeTestCase t = new AttributeTestCase();
+
+                            int i = 0;
+                            int totalScore = 0;
+                            int totalPossibleScore = 0;
+                            for (JavaClassInfo c : classes){
+                                int attributeGrade = t.attributeGrading(c.getAttributeNames(), specs.get(i));
+                                System.out.println("The attribute grade for class " + c.getClassName() + ": " + attributeGrade + "/" + specs.get(i).size());
+                                totalPossibleScore = specs.get(i).size() + totalPossibleScore;
+                                totalScore = totalScore + attributeGrade;
+                                i++;
+                                // Line by line, add the grade to the PDF.
+                            }
+                            
+                            // Calculate aggregate score and add to PDF.
+                            System.out.println("The total grade for attributes gained was: " + totalScore + "/" + totalPossibleScore);
+
+                            // Get list of method names.
+                            List <String> methods = new ArrayList <String>();
+                            for (MethodInfo methodInfo : classes.get(1).getMethodInfoMap().values()) {
+                                // Add to list
+                                methods.add(methodInfo.getMethodName());
+
+                                // System.out.println("Method: " + methodInfo.getMethodName());
+
+                                // System.out.println("  Return Type: " + methodInfo.getReturnType());
                             }
 
-                            // For the Flight class.
-                            AttributeTestCase t = new AttributeTestCase();
-                            int attributeGrade = t.attributeGrading(classes.get(1).getAttributeNames(), sampleAttrSpec);
-                            System.out.println("The attribute grade is: " + attributeGrade + "/" + sampleAttrSpec.size());
+                            // Now compare the names of these methods against the spec.
 
                             // Export that grade to PDF.
                             // The overview will give comments based on the grade received - good, very good, fair, etc.

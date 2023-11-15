@@ -20,8 +20,6 @@ import java.util.Map;
 
 public class JavaCodeAnalyzer {
 
-
-
     private static Map<String, JavaClassInfo> classInfoMap = new HashMap<>();
 
     static class NamingConventionVisitor extends VoidVisitorAdapter<Void> {
@@ -50,11 +48,11 @@ public class JavaCodeAnalyzer {
             String methodName = n.getNameAsString();
 
                 Type returnType = n.getType();
-                List<JavaClassInfo.ParameterInfo> parameters = new ArrayList<>();
+                List<ParameterInfo> parameters = new ArrayList<>();
                 n.getParameters().forEach(parameter -> {
                     String paramName = parameter.getNameAsString();
                     String paramType = parameter.getTypeAsString();
-                    parameters.add(new JavaClassInfo.ParameterInfo(paramName, paramType));
+                    parameters.add(new ParameterInfo(paramName, paramType));
                 });
 
                 JavaClassInfo currentClassInfo = classInfoMap.get(n.findAncestor(ClassOrInterfaceDeclaration.class).get().getNameAsString());

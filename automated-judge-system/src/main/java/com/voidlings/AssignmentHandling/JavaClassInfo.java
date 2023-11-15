@@ -34,46 +34,4 @@ public class JavaClassInfo {
       MethodInfo methodInfo = new MethodInfo(methodName, returnType, parameters);
       this.methodInfoMap.put(methodName, methodInfo);
   }
-
-  static class MethodInfo {
-    private String methodName;
-    private String returnType;
-    private List<ParameterInfo> parameters;
-
-    public MethodInfo(String methodName, String returnType, List<ParameterInfo> parameters) {
-        this.methodName = methodName;
-        this.returnType = returnType;
-        this.parameters = parameters;
-    }
-
-    public String getMethodName() {
-        return methodName;
-    }
-
-    public String getReturnType() {
-        return returnType;
-    }
-
-    public List<ParameterInfo> getParameters() {
-        return parameters;
-    }
-  }
-
-  static class ParameterInfo {
-      private String paramName;
-      private String paramType;
-
-      public ParameterInfo(String paramName, String paramType) {
-          this.paramName = paramName;
-          this.paramType = paramType;
-      }
-
-      public String getParamName() {
-          return paramName;
-      }
-
-      public String getParamType() {
-          return paramType;
-      }
-    }
 }
