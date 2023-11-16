@@ -4,9 +4,12 @@ import java.io.File;
 import java.util.ArrayList;
 
 import com.voidlings.FileHandling.*;
+import com.voidlings.SpecificationHandling.JavaHandler;
+import com.voidlings.SpecificationHandling.SpecificationComponents;
+import com.voidlings.SpecificationHandling.SpecificationHandler;
 
 public class App {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
       //NOTE FROM DOMINIQUE: License to use PDF table extraction API Spire.PDF DO NOT REMOVE
       //Note: this license expires on the 15 december 2023 thus this program will no longer work, there after unless a new license is made
        com.spire.license.LicenseProvider.setLicenseKey("license.elic.xml");
@@ -18,13 +21,15 @@ public class App {
         
         ZIPFileHandler zipFileHandler = new ZIPFileHandler(destinationPath, destinationPath);
 
+        Folder allSubmissions;
+
         
         // Check if the file format is a ZIP file
         if (zipFileHandler.checkFormat(directoryPath)) {
             System.out.println("Valid ZIP file format.");
 
             // Extract files from the ZIP file
-            Folder allSubmissions = zipFileHandler.extractFiles(directoryPath, destinationPath);
+            allSubmissions = zipFileHandler.extractFiles(directoryPath, destinationPath);
             if ((allSubmissions != null) && (allSubmissions.getFileComponents() != null) && (allSubmissions.getFolderList() != null)) {
                 // Uncomment to test heirachy of folder and files
                 /*for (Folder folder : allSubmissions.getFolderList()) {
@@ -39,5 +44,32 @@ public class App {
         } else {
             System.err.println("Invalid file format: ZIP File required.");
         }
+      
+
+       //reads the class names,methods, and attributes, and marks for each class to an arraylist specifcation classes(specification)
+       SpecificationHandler specification = new SpecificationHandler("COMP2603  Assignment 1 Marking Scheme.pdf");
+       ArrayList<SpecificationComponents> specificationClasses = specification.readSpecificationFile();
+       
+       for(SpecificationComponents specClass : specificationClasses){
+        System.out.println(specClass.getClassName());
+        specClass.printAttributes();
+        specClass.printMethods();
+        specClass.printMarks();
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     }
+
+  
+
+     /*JavaHandler javahandler = new JavaHandler(javaList);
+     ArrayList<SpecificationComponents> javas = javahandler.readJava();
+     for(SpecificationComponents java: javas){
+      String name = java.getClassName();
+      System.out.println("Class Name: " + name);
+      System.out.println("Attributes:");
+      java.printAttributes();
+      System.out.println("Methods:");
+      java.printMethods();
+      System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+     }*/
+}
 }
