@@ -91,6 +91,17 @@ public class Folder implements FileComponent{
         return null;
     }
 
+    // Getter method to retrieve the list of files names in folder
+    public List<String> getJavaFilePaths() {
+        List<String> javaNames = new ArrayList<>();
+        for (FileComponent component : allComponents) {
+            if (!component.isFolder()) {
+                javaNames.add(component.getPath());
+            }
+        }
+        return javaNames;
+    }
+
     @Override
     public void setName(String name) {
         this.name= name;

@@ -16,11 +16,12 @@ public class JavatoText implements FileConverter {
     public String convert(String filename) throws Exception{
         File file = new File(filename);
         String path = file.getPath();
+        System.out.println(path);
         // Provide the path to the input Java file
         String inputFilePath = path;
 
         // Provide the path to the output text file
-        String outputFilePath = "/Users/owner/Downloads/comp3607testing/" + filename + ".txt";
+        String outputFilePath = System.getProperty("user.dir") + "/" + filename + ".txt";
 
         try {
             // Read the content of the Java file

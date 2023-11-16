@@ -89,6 +89,7 @@ public class ZIPFileHandler implements FileHandler{
                     try (FileOutputStream fos = new FileOutputStream(outputFile)) {
                         fos.write(bos.toByteArray());
                     }
+                    continue;
                 }
 
                 //if java file encountered, add to the destination directory and create JavaFile instances for addition to submissionFolder
