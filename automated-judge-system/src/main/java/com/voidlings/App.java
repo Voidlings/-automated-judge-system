@@ -6,6 +6,11 @@ import com.voidlings.FileHandling.ZIPFileHandler;
 
 public class App {
     public static void main(String[] args) {
+       //NOTE FROM DOMINIQUE: License to use PDF table extraction API Spire.PDF DO NOT REMOVE
+      //Note: this license expires on the 15 december 2023 thus this program will no longer work, there after unless a new license is made
+      com.spire.license.LicenseProvider.setLicenseKey("license.elic.xml");
+
+
         String directoryPath = "/workspaces/-automated-judge-system/automated-judge-system/src/main/java/com/voidlings/AssignmentSubzip";
 
         String destinationPath = "submissions";
