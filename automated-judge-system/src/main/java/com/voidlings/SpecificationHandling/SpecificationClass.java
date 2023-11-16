@@ -133,6 +133,9 @@ public SpecificationClass(String className){
         return className;
     }
 
+    public void setClassName(String name){
+        this.className = name;
+    }
 
     
 

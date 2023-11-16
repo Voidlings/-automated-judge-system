@@ -22,5 +22,6 @@ public interface SpecificationComponents {
     public ArrayList<String> getAllMethods();
     public ArrayList<String> getAllMarks();
     public  String getClassName();
+    public void setClassName(String name);
 
 }
