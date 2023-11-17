@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "PDFGenerator",
+            "request": "launch",
+            "mainClass": "com.voidlings.ReportHandling.PDFGenerator",
+            "projectName": "automated-judge-system"
+        },
+        {
+            "type": "java",
             "name": "JavaCodeAnalyzer",
             "request": "launch",
             "mainClass": "com.voidlings.AssignmentHandling.JavaCodeAnalyzer",
