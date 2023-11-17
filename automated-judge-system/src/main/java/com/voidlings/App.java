@@ -1,9 +1,10 @@
 package com.voidlings;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
+import java.util.Queue;
 
+import com.voidlings.FileHandling.FileComponent;
 import com.voidlings.FileHandling.*;
 import com.voidlings.SpecificationHandling.JavaHandler;
 import com.voidlings.SpecificationHandling.SpecificationComponents;
@@ -16,15 +17,14 @@ public class App {
        com.spire.license.LicenseProvider.setLicenseKey("license.elic.xml");
        
 
-        String directoryPath= "testFiles.zip"; //replace with actual filepath name, test file for now
+        String directoryPath= "complexHierachy.zip"; //replace with actual filepath name, test file for now
 
-        String destinationPath= "submissions"; //adds to submissions folder on same directory as the App.java file. Do not change this until further notice.
+        String destinationPath= "submissions"; //adds to submissions folder on same directory as the App.java file. Do not change this.
         
         ZIPFileHandler zipFileHandler = new ZIPFileHandler(destinationPath, destinationPath);
 
-        Folder allSubmissions;
+        Queue<Folder> folderQueue = new LinkedList<>();
 
-        
         // Check if the file format is a ZIP file
         if (!zipFileHandler.checkFormat(directoryPath)) {
             System.err.println("Invalid file format: ZIP File required.");
@@ -35,47 +35,71 @@ public class App {
         }
 
         // Extract files from the ZIP file
-        allSubmissions = zipFileHandler.extractFiles(directoryPath, destinationPath);
+        Folder allSubmissions = zipFileHandler.extractFiles(directoryPath, destinationPath);
         if ((allSubmissions != null) && (allSubmissions.getFileComponents() != null) && (allSubmissions.getFolderList() != null)) {
-            // Uncomment to test heirachy of folder and files
-            /*for (Folder folder : allSubmissions.getFolderList()) {
-                    System.out.println(folder.getName());
-                for(JavaFile f: folder.getJavaFiles())
-                    System.out.println(folder.getName() + ": " + f.getName());
-            }*/
+            folderQueue.add(allSubmissions);
+
+            /* Iteratively go through all folders and files, accounts for different file hierarchies within the submissions folder,
+            print statements can be replaced as necessary. Uncomment the block below to use */
+
+            /*while (!folderQueue.isEmpty()) {
+                Folder currentFolder = folderQueue.poll(); // Use poll() to retrieve and remove the head of the queue
+                System.out.println("Folder: " + currentFolder.getName());
+
+                for (FileComponent component : currentFolder.getFileComponents()) {
+                    if (component instanceof JavaFile) {
+                        System.out.println("Folder: " + currentFolder.getName() + " File:" + component.getName());
+                    } else if (component instanceof Folder) {
+                        folderQueue.add((Folder) component);
+                    }
+                }
+            }
+            folderQueue.add(allSubmissions);*/
             System.out.println("Extraction successful.");
         } else {
             System.err.println("Extraction failed. Ensure that the zip contains folder submissions with .java files");
             return;
         }
 
-       //reads the class names,methods, and attributes, and marks for each class to an arraylist specifcation classes(specification)
+        //reads the class names,methods, and attributes, and marks for each class to an arraylist specifcation classes(specification)
        SpecificationHandler specification = new SpecificationHandler("COMP2603  Assignment 1 Marking Scheme.pdf");
        ArrayList<SpecificationComponents> specificationClasses = specification.readSpecificationFile();
        
-       for(SpecificationComponents specClass : specificationClasses){
-        System.out.println(specClass.getClassName());
-        specClass.printAttributes();
-        specClass.printMethods();
-        specClass.printMarks();
-        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    }
-    
-    for (Folder folder : allSubmissions.getFolderList()) {
-        ArrayList<String> javaFileNames= new ArrayList<>();
-        javaFileNames.addAll(folder.getJavaFilePaths()); //get all file paths in each folder
-    
-        JavaHandler javahandler = new JavaHandler(javaFileNames);
-        ArrayList<SpecificationComponents> javas = javahandler.readJava();
-        for(SpecificationComponents java: javas){
-            String name = java.getClassName();
-            System.out.println("Class Name: " + name);
-            System.out.println("Attributes:");
-            java.printAttributes();
-            System.out.println("Methods:");
-            java.printMethods();
-            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        for(SpecificationComponents specClass : specificationClasses){
+            System.out.println(specClass.getClassName());
+            specClass.printAttributes();
+            specClass.printMethods();
+            specClass.printMarks();
+            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         }
+
+        /*while (!folderQueue.isEmpty()) {
+            Folder currentFolder = folderQueue.poll(); // Use poll() to retrieve and remove the head of the queue
+
+            for (FileComponent component : currentFolder.getFileComponents()) {
+                if (component instanceof Folder) {
+                    System.out.println("Folder: " + component.getName());
+                    if(((Folder)component).getJavaFiles() != null){
+                        ArrayList<String> javaFileNames= new ArrayList<>();
+                        javaFileNames.addAll(((Folder)component).getJavaFilePaths()); //get all file paths in each folder
+                        
+                        JavaHandler javahandler = new JavaHandler(javaFileNames);
+                        ArrayList<SpecificationComponents> javas = javahandler.readJava();
+                        for(SpecificationComponents java: javas){
+                            String name = java.getClassName();
+                            System.out.println("Class Name: " + name);
+                            System.out.println("Attributes:");
+                            java.printAttributes();
+                            System.out.println("Methods:");
+                            java.printMethods();
+                            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                        }
+                    }
+                    folderQueue.add((Folder) component);
+                }
+            }
+        }*/
     }
-}
+
+
 }
