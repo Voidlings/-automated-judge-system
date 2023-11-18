@@ -171,7 +171,7 @@ public class JavaCodeAnalyzer {
     }
 
     public static void main(String[] args) {
-        String extractedFilesDirectory = "automated-judge-system/src/main/java/com/voidlings/submissions";
+        String extractedFilesDirectory = "automated-judge-system/src/main/java/com/voidlings/Submissions";
         analyzeCode(extractedFilesDirectory);
 
         // Print information about classes, attributes, and methods

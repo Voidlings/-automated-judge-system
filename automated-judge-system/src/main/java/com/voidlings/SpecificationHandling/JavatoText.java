@@ -16,7 +16,7 @@ public class JavatoText implements FileConverter {
     public String convert(String filename) throws Exception{
         File file = new File(filename);
         String path = file.getPath();
-        System.out.println(path);
+        // System.out.println(path);
         // Provide the path to the input Java file
         String inputFilePath = path;
 
@@ -30,7 +30,7 @@ public class JavatoText implements FileConverter {
             // Write the Java code to the text file
             writeTextFile(outputFilePath, javaCode);
 
-            System.out.println("Conversion successful. Java file converted to text file.");
+            // System.out.println("Conversion successful. Java file converted to text file.");
         } catch (IOException e) {
             System.err.println("Error: " + e.getMessage());
             e.printStackTrace();

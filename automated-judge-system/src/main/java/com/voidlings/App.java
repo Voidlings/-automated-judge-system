@@ -8,6 +8,8 @@ import com.voidlings.FileHandling.*;
 import com.voidlings.SpecificationHandling.JavaHandler;
 import com.voidlings.SpecificationHandling.SpecificationComponents;
 import com.voidlings.SpecificationHandling.SpecificationHandler;
+import com.voidlings.TestCases.AttributeTestCase;
+import com.voidlings.TestCases.MethodTestCase;
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -18,7 +20,7 @@ public class App {
 
         String directoryPath= "testFiles.zip"; //replace with actual filepath name, test file for now
 
-        String destinationPath= "submissions"; //adds to submissions folder on same directory as the App.java file. Do not change this until further notice.
+        String destinationPath= "Submissions"; //adds to submissions folder on same directory as the App.java file. Do not change this until further notice.
         
         ZIPFileHandler zipFileHandler = new ZIPFileHandler(destinationPath, destinationPath);
 
@@ -49,33 +51,49 @@ public class App {
             return;
         }
 
-       //reads the class names,methods, and attributes, and marks for each class to an arraylist specifcation classes(specification)
-       SpecificationHandler specification = new SpecificationHandler("COMP2603  Assignment 1 Marking Scheme.pdf");
-       ArrayList<SpecificationComponents> specificationClasses = specification.readSpecificationFile();
-       
-       for(SpecificationComponents specClass : specificationClasses){
-        System.out.println(specClass.getClassName());
-        specClass.printAttributes();
-        specClass.printMethods();
-        specClass.printMarks();
-        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    }
-    
-    for (Folder folder : allSubmissions.getFolderList()) {
-        ArrayList<String> javaFileNames= new ArrayList<>();
-        javaFileNames.addAll(folder.getJavaFilePaths()); //get all file paths in each folder
-    
-        JavaHandler javahandler = new JavaHandler(javaFileNames);
-        ArrayList<SpecificationComponents> javas = javahandler.readJava();
-        for(SpecificationComponents java: javas){
-            String name = java.getClassName();
-            System.out.println("Class Name: " + name);
-            System.out.println("Attributes:");
-            java.printAttributes();
-            System.out.println("Methods:");
-            java.printMethods();
-            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        //reads the class names,methods, and attributes, and marks for each class to an arraylist specifcation classes(specification)
+        SpecificationHandler specification = new SpecificationHandler("COMP2603  Assignment 1 Marking Scheme.pdf");
+        ArrayList<SpecificationComponents> specificationClasses = specification.readSpecificationFile();
+        /*
+        for(SpecificationComponents specClass : specificationClasses){
+            System.out.println(specClass.getClassName());
+            specClass.printAttributes();
+            specClass.printMethods();
+            specClass.printMarks();
+            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        }
+        */
+
+        for (Folder folder : allSubmissions.getFolderList()) {
+            ArrayList<String> javaFileNames= new ArrayList<>();
+            javaFileNames.addAll(folder.getJavaFilePaths()); //get all file paths in each folder
+        
+            JavaHandler javahandler = new JavaHandler(javaFileNames);
+            ArrayList<SpecificationComponents> javas = javahandler.readJava();
+            // Grade each class against the specification.
+            // Attributes are graded, 1 mark each per present attribute.
+            AttributeTestCase gradeAttr = new AttributeTestCase();
+            int attrGrades = gradeAttr.calculateAttributeScore(specificationClasses, javas);
+
+            // Methods: Marks per method in ArrayList. If present, mark given.
+            MethodTestCase gradeMethods = new MethodTestCase();
+            // Sum method grades and attribute grades in order to get total grade.
+            int methodGrades = gradeMethods.calculateMethodScore(specificationClasses, javas);
+
+            System.out.println("Total marks obtained from the assignment: " + (attrGrades + methodGrades)); 
+            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+
+            /*
+            for(SpecificationComponents java: javas){
+                String name = java.getClassName();
+                //System.out.println("Class Name: " + name);
+                System.out.println("Attributes:");
+                java.printAttributes();
+                //System.out.println("Methods:");
+                //java.printMethods();
+                System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            }
+            */
         }
     }
-}
 }

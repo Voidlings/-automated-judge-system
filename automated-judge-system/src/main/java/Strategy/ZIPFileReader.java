@@ -1,4 +1,4 @@
-package Stratergy;
+package Strategy;
 
 import java.io.*;
 import java.util.zip.ZipEntry;
@@ -98,7 +98,7 @@ public class ZIPFileReader implements ReadingStrategy {
 
                     // Write the content to the outputFile
                     try (FileOutputStream fos = new FileOutputStream(outputFile)) {
-                        fos.write(("package com.voidlings.submissions." + currentFolder.getName() + ";\n").getBytes());
+                        fos.write(("package com.voidlings.Submissions." + currentFolder.getName() + ";\n").getBytes());
                         fos.write(bos.toByteArray());
                     }
                 } else {

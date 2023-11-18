@@ -114,7 +114,7 @@ public class ZIPFileHandler implements FileHandler{
 
                     // Write the content to the outputFile
                     try (FileOutputStream fos = new FileOutputStream(outputFile)) {
-                        fos.write(("package com.voidlings.submissions." + currentFolder.getName() + ";\n")
+                        fos.write(("package com.voidlings.Submissions." + currentFolder.getName() + ";\n")
                                 .getBytes());
                         fos.write(bos.toByteArray());
                     }
