@@ -47,7 +47,7 @@ Outcome: Enhanced grading efficiency, allowing educators to focus on lesson plan
 
 # Actor: Lecturer or Teaching Assistant
 
- # Precondition:
+* # Precondition:
 
 * The Automated Grading System is installed and configured.
 * A PDF version of the assignment rubric is available.
@@ -55,7 +55,7 @@ Outcome: Enhanced grading efficiency, allowing educators to focus on lesson plan
 available.
 *The user has permission to create directories in the working directory.
 
- #  Flow of Events:
+* #  Flow of Events:
 
 * The user selects the PDF assignment rubric file and the directory of student assignment submissions.
   
@@ -78,6 +78,35 @@ The lecturer or teaching assistant can review the reports and provide additional
 (I need to go through the code further to get more)
 
 
+# Design
+
+* # Design Patterns used:
+
+  # Composite Design Pattern
+  * Purpose: The composite design pattern was used to treat the Folder and JavaFile classes uniformly. They both implemented the FileComponent interface, this interface contains four abstract methods, getname, setName, isFolder, and getPath.
+    
+  * # Stratergy Design Pattern:
+  * Purpose: The Strategy Design Pattern was used to give the system options in relation to file conversion. The two strategies for conversion would be JavatoText and PDFtoTex, both these classes implement the FileConverter interface. The implementation of this code can be seen in the JavaHandler class.
+ 
+
+# Conformance to SOLID: 
+* # Single Responsibility Principle:
+  *Each class is designed with a single responsibility.
+   Examples: The PDFtoText class is solely responsible for PDFtoText conversion and nothing else.
+
+  * # Open/Closed Principle:
+ 
+  * # Liskov Substitution Principle:
+ 
+
+  * # Interface Segregation Principle:
+ 
+  *  # Dependency Inversion Principle:
+
+ 
+  
+ 
+  
 
 
 
