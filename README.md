@@ -23,7 +23,7 @@ Outcome: Enhanced grading efficiency, allowing educators to focus on lesson plan
 
 # -Analysis
 
-# * Major Requirements:
+* #  Major Requirements:
 
 * Input Data handling
   
@@ -45,9 +45,9 @@ Outcome: Enhanced grading efficiency, allowing educators to focus on lesson plan
 
 # Use Case
 
-Actor: Lecturer or Teaching Assistant
+# Actor: Lecturer or Teaching Assistant
 
-Precondition:
+ # Precondition:
 
 * The Automated Grading System is installed and configured.
 * A PDF version of the assignment rubric is available.
@@ -55,7 +55,7 @@ Precondition:
 available.
 *The user has permission to create directories in the working directory.
 
-* Flow of Events:
+ #  Flow of Events:
 
 * The user selects the PDF assignment rubric file and the directory of student assignment submissions.
   
@@ -67,12 +67,12 @@ available.
   
 *The system saves the generated reports to a designated directory.
 
-Postcondition:
+ # Postcondition:
 
 Detailed PDF reports with feedback and scores are generated for each student assignment submission.
 The lecturer or teaching assistant can review the reports and provide additional feedback to students as needed.
 
-Alternate Flows:
+ # Alternate Flows:
 
 *If the PDF assignment rubric file is not found, the system throws an error.
 (I need to go through the code further to get more)
