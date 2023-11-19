@@ -45,9 +45,37 @@ Outcome: Enhanced grading efficiency, allowing educators to focus on lesson plan
 
 # Use Case
 
-*Student Submission:
+Actor: Lecturer or Teaching Assistant
 
+Precondition:
 
+* The Automated Grading System is installed and configured.
+* A PDF version of the assignment rubric is available.
+* A directory of student assignment submissions in ZIP format is 
+available.
+*The user has permission to create directories in the working directory.
+
+* Flow of Events:
+
+* The user selects the PDF assignment rubric file and the directory of student assignment submissions.
+  
+* The system extracts and stores the specifications from the PDF assignment rubric file.
+  
+* The system traverses the directory of student assignment submissions, extracts each submission to an individual directory within the "Submissions" directory, and evaluates the correctness of the submitted Java code against the predefined assignment specifications.
+  
+* For each assignment submission, the system generates a detailed report containing the score attained, the tests passed, and hints for improvements.
+  
+*The system saves the generated reports to a designated directory.
+
+Postcondition:
+
+Detailed PDF reports with feedback and scores are generated for each student assignment submission.
+The lecturer or teaching assistant can review the reports and provide additional feedback to students as needed.
+
+Alternate Flows:
+
+*If the PDF assignment rubric file is not found, the system throws an error.
+(I need to go through the code further to get more)
 
 
 
