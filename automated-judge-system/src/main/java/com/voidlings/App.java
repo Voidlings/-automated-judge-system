@@ -1,17 +1,13 @@
 package com.voidlings;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 import com.voidlings.FileHandling.*;
-import com.voidlings.SpecificationHandling.JavaHandler;
-import com.voidlings.SpecificationHandling.SpecificationComponents;
-import com.voidlings.SpecificationHandling.SpecificationHandler;
-import com.voidlings.TestCases.AttributeTestCase;
-import com.voidlings.TestCases.MethodTestCase;
-import com.voidlings.EvaluationHandling.AttributeEval;
-import com.voidlings.EvaluationHandling.MethodEval;
+import com.voidlings.ReportHandling.*;
+import com.voidlings.SpecificationHandling.*;
+import com.voidlings.TestCases.*;
+import com.voidlings.EvaluationHandling.*;
+
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -110,6 +106,10 @@ public class App {
               System.out.println("Method: " + method.name + "\nPassed: " + method.passed + "\nScore:" + method.score + "\n");
               System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
             } */
+            
+            EvaluationReport report = new PDFEvaluationReport(attrEval, methodEval);
+            Generator pdfGenerator = new PDFGenerator(report, folder.getName());
+            pdfGenerator.generate();
         }
     }
 }

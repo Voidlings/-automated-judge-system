@@ -31,11 +31,11 @@ public class AttributeTestCase {
           // For each attribute in attributes, if attribute exists, then mark is given. 1 mark per attribute.
           for (String assignAttr : java.getAllAttributes()){
             if (assignAttr.replace(" ","").contains(assignAttr.replace(" ","").replace("private", "").replace("public", "").replace("static", ""))){
-              attributeEvals.add(new AttributeEval(assignAttr, true, 1));
+              attributeEvals.add(new AttributeEval(assignAttr, true, 1, 1));
               totalScore += 1;
               ////System.out.println("Attribute " + assignAttr + " is implemented in the assignment.");
             } else {
-              attributeEvals.add(new AttributeEval(assignAttr, false, 0));
+              attributeEvals.add(new AttributeEval(assignAttr, false, 0, 1));
               //System.out.println("Attribute " + assignAttr + " is missing from the assignment.");
             }
           }

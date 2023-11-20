@@ -31,15 +31,15 @@ public class MethodTestCase{
 
             // For each method in methods, if method exists, then mark is given.
             for (String assignMethod : java.getAllMethods()){
+
+              int marks = Integer.valueOf(specClass.getAllMarks().get(counter).trim());
+              
               if (assignMethod.replace(" ","").contains(assignMethod.replace(" ",""))){
                 // System.out.println("Method " + assignMethod + " exists.");
-
-                // Marks added to score.
-                int marks = Integer.valueOf(specClass.getAllMarks().get(counter).trim());
-                methodEvals.add(new MethodEval(assignMethod, true, marks));
+                methodEvals.add(new MethodEval(assignMethod, true, marks, marks));
                 totalScore += marks;
               } else {
-                methodEvals.add(new MethodEval(assignMethod, false, 0));
+                methodEvals.add(new MethodEval(assignMethod, false, 0, marks));
                 //System.out.println("Method " + assignMethod + " is missing from the assignment.");
               }
             }
