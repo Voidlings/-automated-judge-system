@@ -2,9 +2,64 @@ package com.voidlings.TestCases;
 
 import java.util.ArrayList;
 
+import com.voidlings.EvaluationHandling.MethodEval;
 import com.voidlings.SpecificationHandling.SpecificationComponents;
 
 public class MethodTestCase{
+  private ArrayList<SpecificationComponents> specs;
+  private ArrayList<SpecificationComponents> javaFiles;
+  private int totalScore; 
+  private ArrayList<MethodEval> methodEvals;
+
+  public MethodTestCase(ArrayList<SpecificationComponents> specs, ArrayList<SpecificationComponents> javaFiles){
+    this.specs = specs;
+    this.javaFiles = javaFiles;
+    this.totalScore = 0;
+    this.methodEvals = new ArrayList<MethodEval>();
+    methodTestCase();
+  }
+
+  public void methodTestCase() {
+    int counter = 0;
+
+    // Takes ArrayList of all specification information as well as ArrayList of all java classes.
+      for (SpecificationComponents specClass : specs){
+        // Find if the class exists in the assignment specs, and then continue grading logic.
+        for (SpecificationComponents java: javaFiles){
+          if (java.getClassName().contains(specClass.getClassName())){
+            // System.out.println("Class " + java.getClassName() + " exists.");
+
+            // For each method in methods, if method exists, then mark is given.
+            for (String assignMethod : java.getAllMethods()){
+              if (assignMethod.replace(" ","").contains(assignMethod.replace(" ",""))){
+                // System.out.println("Method " + assignMethod + " exists.");
+
+                // Marks added to score.
+                int marks = Integer.valueOf(specClass.getAllMarks().get(counter).trim());
+                methodEvals.add(new MethodEval(assignMethod, true, marks));
+                totalScore += marks;
+              } else {
+                methodEvals.add(new MethodEval(assignMethod, false, 0));
+                //System.out.println("Method " + assignMethod + " is missing from the assignment.");
+              }
+            }
+            counter += 1; // Update counter - index for finding correct mark.
+          }
+          counter = 0;
+        }
+      }
+    }
+
+  public int getTotalScore(){
+    return totalScore;
+  }
+
+  public ArrayList<MethodEval> getMethodEvals(){
+    return methodEvals;
+  }
+
+
+  /* 
     public int calculateMethodScore(ArrayList<SpecificationComponents> specs, ArrayList<SpecificationComponents> javaFiles){
       int score = 0;
       int totalScore = 0;
@@ -56,5 +111,5 @@ public class MethodTestCase{
       }
       System.out.println("Total score for methods obtained: " + totalScore + "\n");
       return totalScore;
-    }
+    } */
 }

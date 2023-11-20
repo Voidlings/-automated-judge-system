@@ -2,10 +2,58 @@ package com.voidlings.TestCases;
 
 import java.util.ArrayList;
 
+import org.w3c.dom.Attr;
+
 import com.voidlings.SpecificationHandling.SpecificationComponents;
+import com.voidlings.EvaluationHandling.AttributeEval;
 
 public class AttributeTestCase {
-  public int calculateAttributeScore(ArrayList<SpecificationComponents> specs, ArrayList<SpecificationComponents> javaFiles){
+  private ArrayList<SpecificationComponents> specs;
+  private ArrayList<SpecificationComponents> javaFiles;
+  private int totalScore; 
+  private ArrayList<AttributeEval> attributeEvals;
+
+  public AttributeTestCase(ArrayList<SpecificationComponents> specs, ArrayList<SpecificationComponents> javaFiles){
+    this.specs = specs;
+    this.javaFiles = javaFiles;
+    this.totalScore = 0;
+    this.attributeEvals = new ArrayList<AttributeEval>();
+    attrTestcase();
+  }
+
+  public void attrTestcase () {
+    for (SpecificationComponents specClass : specs){
+      // Find if the class exists in the assignment specs, and then continue grading logic.
+      for (SpecificationComponents java: javaFiles){
+        if (java.getClassName().contains(specClass.getClassName())){
+          // System.out.println("Class " + java.getClassName() + " exists.");
+
+          // For each attribute in attributes, if attribute exists, then mark is given. 1 mark per attribute.
+          for (String assignAttr : java.getAllAttributes()){
+            if (assignAttr.replace(" ","").contains(assignAttr.replace(" ","").replace("private", "").replace("public", "").replace("static", ""))){
+              attributeEvals.add(new AttributeEval(assignAttr, true, 1));
+              totalScore += 1;
+              ////System.out.println("Attribute " + assignAttr + " is implemented in the assignment.");
+            } else {
+              attributeEvals.add(new AttributeEval(assignAttr, false, 0));
+              //System.out.println("Attribute " + assignAttr + " is missing from the assignment.");
+            }
+          }
+        }
+      }
+    }
+  }
+
+  public int getTotalScore(){
+    return totalScore;
+  }
+
+  public ArrayList<AttributeEval> getAttributeEvals(){
+    return attributeEvals;
+  }
+
+  /* 
+  public int calculateAttributeScore(){
     int score = 0;
     int totalScore = 0;
     int numFound = 0;
@@ -45,5 +93,5 @@ public class AttributeTestCase {
 
     System.out.println("Total score for attributes obtained: " + totalScore + "\n");
     return totalScore;
-  }
+  } */
 }

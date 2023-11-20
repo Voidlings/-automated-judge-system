@@ -10,6 +10,8 @@ import com.voidlings.SpecificationHandling.SpecificationComponents;
 import com.voidlings.SpecificationHandling.SpecificationHandler;
 import com.voidlings.TestCases.AttributeTestCase;
 import com.voidlings.TestCases.MethodTestCase;
+import com.voidlings.EvaluationHandling.AttributeEval;
+import com.voidlings.EvaluationHandling.MethodEval;
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -70,19 +72,7 @@ public class App {
         
             JavaHandler javahandler = new JavaHandler(javaFileNames);
             ArrayList<SpecificationComponents> javas = javahandler.readJava();
-            // Grade each class against the specification.
-            // Attributes are graded, 1 mark each per present attribute.
-            AttributeTestCase gradeAttr = new AttributeTestCase();
-            int attrGrades = gradeAttr.calculateAttributeScore(specificationClasses, javas);
-
-            // Methods: Marks per method in ArrayList. If present, mark given.
-            MethodTestCase gradeMethods = new MethodTestCase();
-            // Sum method grades and attribute grades in order to get total grade.
-            int methodGrades = gradeMethods.calculateMethodScore(specificationClasses, javas);
-
-            System.out.println("Total marks obtained from the assignment: " + (attrGrades + methodGrades)); 
-            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-
+            
             /*
             for(SpecificationComponents java: javas){
                 String name = java.getClassName();
@@ -94,6 +84,32 @@ public class App {
                 System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             }
             */
+
+            // Grade each class against the specification.
+            // Attributes are graded, 1 mark each per present attribute.
+            AttributeTestCase gradeAttr = new AttributeTestCase(specificationClasses, javas);
+           
+            // Methods: Marks per method in ArrayList. If present, mark given.
+            MethodTestCase gradeMethods = new MethodTestCase(specificationClasses, javas);
+            // Sum method grades and attribute grades in order to get total grade.
+
+            System.out.println("Total marks obtained from the assignment: " + (gradeAttr.getTotalScore() + gradeMethods.getTotalScore() + " marks")); 
+            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+
+            ArrayList<AttributeEval> attrEval = gradeAttr.getAttributeEvals();
+            ArrayList<MethodEval> methodEval = gradeMethods.getMethodEvals();
+
+            /* 
+            for (AttributeEval attr : attrEval){
+              System.out.println("Attibute: " + attr.name + "\nPassed: " + attr.passed + "\nScore:" + attr.score + "\n");
+              System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+            } */
+            
+            /* 
+            for (MethodEval method : methodEval){
+              System.out.println("Method: " + method.name + "\nPassed: " + method.passed + "\nScore:" + method.score + "\n");
+              System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+            } */
         }
     }
 }
