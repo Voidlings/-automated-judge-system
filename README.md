@@ -80,30 +80,132 @@ The lecturer or teaching assistant can review the reports and provide additional
 
 # Design
 
+
 * # Design Patterns used:
 
-  # Composite Design Pattern
-  * Purpose: The composite design pattern was used to treat the Folder and JavaFile classes uniformly. They both implemented the FileComponent interface, this interface contains four abstract methods, getname, setName, isFolder, and getPath.
-    
-  * # Stratergy Design Pattern:
-  * Purpose: The Strategy Design Pattern was used to give the system options in relation to file conversion. The two strategies for conversion would be JavatoText and PDFtoTex, both these classes implement the FileConverter interface. The implementation of this code can be seen in the JavaHandler class.
- 
 
-# Conformance to SOLID: 
+ # Composite Design Pattern
+ * Purpose: The composite design pattern was used to treat the Folder and JavaFile classes uniformly. They both implemented the FileComponent interface, this interface contains four abstract methods, getname, setName, isFolder, and getPath. This Design Pattern was implemented in a attempt to compose objects of similar nature into a hierachal system and then use them as though they were indiviual/ ungrouped components.
+  
+ * # Stratergy Design Pattern:
+ * Purpose: The Strategy Design Pattern was used to give the system options in relation to file conversion.The two strategies for conversion would be the implementation of the two concrete strategy classes JavatoText and PDFtoTexT, both these classes implement the FileConverter interface. The implementation of this code can be seen in the JavaHandler class and the SpecificationHandler class.
+
+
+# Conformance to SOLID:
 * # Single Responsibility Principle:
-  *Each class is designed with a single responsibility.
-   Examples: The PDFtoText class is solely responsible for PDFtoText conversion and nothing else.
+ *Each class is designed with a single responsibility.
+  Examples: The ZIPFileHandler class is solely responsible for the extracting of composite objects referred to as files or folders from a compressed version of a folder.
 
-  * # Open/Closed Principle:
- 
-  * # Liskov Substitution Principle:
- 
 
-  * # Interface Segregation Principle:
- 
-  *  # Dependency Inversion Principle:
+ * # Open/Closed Principle:
+ In the applications implementation Open/ Closed principle was used in multiple instance in an attempt to design Classes and Methods to facilitate new functionality without editing existing source code. This was done through the use of interfaces that allow the implemented concrete classes to facility modified functionality. seen in the
+ * # Liskov Substitution Principle:
+All SubTypes are replaceable by the their base classes. For Example Specification Components can make reference to all of the functionalities of its subtype specification class.
 
- 
+
+ * # Interface Segregation Principle:
+ Class within the application a not forced to implement interfaces in which is not 100% necessary for the functionality of the concrete class.
+ * # Dependency Inversion Principle:
+ Concrete Classes that implement a high level module (Abstract Classes, Interfaces, etc) are not directly instantiated with there static and dynamic types being that of the low level class. PolyMorphism is used throughout the application where the static type is that of the high level module and the dynamic type is that of the low level module for all possible instances of Instantions and object references. 
+
+
+
+
+
+
+
+# Class Level API Documentation
+
+
+# Public Class ZIPFileHandler
+
+
+    Instances of ZIPFileHandler objects can only be obtained through monomorphic instantiation of a ZIPFileHandler Object
+
+
+    * Main Methods of The Class
+    The main method for the ZIPFileHandler, is the extractFiles() function that takes two parameters 1. String zipFilePath which contains a reference to a zip composed of student assignment submissions  and 2. String destinationPath used to indicated where the contents of the previous parameter reference will be stored. This method opens a ZIP file referenced by parameter one and extract the necessary files, creates a folder structure and determines whether files are java files or not. If they are they are added to a nested folder and added to it. these nested folders and returned to an object that stores them.
+
+
+    *Main Clients of the Class
+     The sole client of the ZIPFileHandler class is the App.java class
+
+
+   *How to use the class
+   1.Instantiate a ZIPFileHandler object with the desired parameter contents
+
+
+   2. Instantiate an object Folder object to hold the Folders of extracted submission files which are the results returned by the ZIPHandler object
+
+
+   3. Using the ZipFileHandler object created call the 'extractFiles' function and assign the results to the folder object created
+
+
+
+
+
+
+        allSubmissions = zipFileHandler.extractFiles(directoryPath, destinationPath);
+       if ((allSubmissions != null) && (allSubmissions.getFileComponents() != null) && (allSubmissions.getFolderList() != null)) {
+           System.out.println("Extraction successful.");
+       } else {
+           System.err.println("Extraction failed. Ensure that the zip contains folder submissions with .java files");
+           return;
+       }
+
+
+# Public Class SpecificationHandler
+
+
+Instances of SpecificationFileHandler objects can only be obtained through monomorphic instantion of  a SPecificationHandler Object
+
+
+*Main Method
+The main method of the specificationHandler class is the , readSpecification function, It utilizes the PDFtoText class converter to obtain the text content and then parses the content line by line. The function identifies keywords such as Class, Attribute, and Method to extract information about classes, attributes, and methods. It maintains separate ArrayLists for attributes, methods, and class names, while also distinguishing between class information and a mark scheme table. The extracted data is used to create instances of a SpecificationClass object AsgClass , representing assignment classes, and populates them with attributes and methods.The function then returns an ArrayList of SpecificationComponents.
+
+
+*Main Client
+The sole client of the SpecificationHandler class is the App.java class
+
+
+*How to use this class
+1. Instantiate an ArrayList of specificationComponents
+
+
+2. Instantiate a SpecificationHandler Object with a reference to a pdf you wish to read ad the parameter
+
+
+3. using the SpecificationHandler Object call the readSpecificationFile and assign its results to the ArrayList of specificationComponents
+
+
+Sample code:
+
+
+       SpecificationHandler specification = new SpecificationHandler("COMP2603  Assignment 1 Marking Scheme.pdf");
+       ArrayList<SpecificationComponents> specificationClasses = specification.readSpecificationFile();
+
+
+
+
+# Public Class JavaHandler
+
+
+
+
+# Public Interface Specification Component
+
+
+
+
+# Public Class MethodTestCase
+
+
+
+
+
+
+# Public Class AttributeTestCase
+
   
  
   
