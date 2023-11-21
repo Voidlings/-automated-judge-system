@@ -17,8 +17,19 @@ import com.voidlings.SpecificationHandling.SpecificationHandler;
 import com.voidlings.TestCases.AttributeTestCase;
 import com.voidlings.TestCases.MethodTestCase;
 
+/**
+ * The main application class that handles the automated grading process.
+ */
 
 public class App {
+
+        /**
+     * Main entry point for the application.
+     * 
+     * @param args Command-line arguments (not used).
+     * @throws Exception If an error occurs during the execution.
+     */
+
     public static void main(String[] args) throws Exception {
       //NOTE FROM DOMINIQUE: License to use PDF table extraction API Spire.PDF DO NOT REMOVE
       //Note: this license expires on the 15 december 2023 thus this program will no longer work, there after unless a new license is made

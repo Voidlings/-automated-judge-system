@@ -10,23 +10,48 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * The PDFGenerator class implements the Generator interface and is responsible for
+ * generating PDF reports based on the provided EvaluationReport and title.
+ *
+ * @author Voidlings
+ * @version 1.0
+ */
+public class PDFGenerator implements Generator {
 
-public class PDFGenerator implements Generator{
+    /**
+     * The EvaluationReport to generate the PDF report from.
+     */
     private EvaluationReport report;
-    private String title; 
 
+    /**
+     * The title of the report.
+     */
+    private String title;
+
+    /**
+     * Constructs a PDFGenerator with the given EvaluationReport and title.
+     *
+     * @param report The EvaluationReport to generate the PDF report from.
+     * @param title  The title of the report.
+     */
     public PDFGenerator(EvaluationReport report, String title) {
         this.report = report;
         this.title = title;
     }
 
+    /**
+     * Generates the PDF report and saves it to the specified directory.
+     *
+     * @throws IOException If an I/O error occurs during the PDF generation.
+     */
     public void generate() throws IOException {
-        String directory = "Reports/" ;
+        String directory = "Reports/";
         File dir = new File(directory);
-        if (!dir.exists()){
+        if (!dir.exists()) {
             dir.mkdirs();
         }
-    
+
         File file = new File(directory + title);
         if (file.exists()) {
             file.delete();
@@ -94,4 +119,3 @@ public class PDFGenerator implements Generator{
         }
     }
 }
-        

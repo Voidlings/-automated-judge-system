@@ -18,6 +18,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * The JavaCodeAnalyzer class is responsible for analyzing Java code within a specified directory
+ * and extracting information about classes, attributes, and methods. It uses the JavaParser library
+ * to parse Java files and then employs a visitor pattern to traverse the Abstract Syntax Tree (AST)
+ * and gather relevant information.
+ *
+ * @author Voidlings
+ * @version 1.0
+ */
+
+
 public class JavaCodeAnalyzer {
 
     static class JavaClassInfo {
@@ -37,23 +49,52 @@ public class JavaCodeAnalyzer {
             return attributeNames;
         }
 
+        /**
+         * Map of method information, where the key is the method name and the value is MethodInfo.
+         */
+
         public Map<String, MethodInfo> getMethodInfoMap() {
             return methodInfoMap;
         }
+        /**
+         * Adds an attribute name to the list of attribute names.
+         *
+         * @param attributeName The name of the attribute to be added.
+         */
 
         public void addAttributeName(String attributeName) {
             this.attributeNames.add(attributeName);
         }
+        /**
+         * Adds method information to the map of method information.
+         *
+         * @param methodName   The name of the method.
+         * @param returnType   The return type of the method.
+         * @param parameters   The list of method parameters.
+         */
 
         public void addMethodName(String methodName, String returnType, List<ParameterInfo> parameters) {
             MethodInfo methodInfo = new MethodInfo(methodName, returnType, parameters);
             this.methodInfoMap.put(methodName, methodInfo);
         }
 
+        /**
+         * Represents information about a method in a Java class, including its name, return type,
+         * and a list of parameters.
+         */
+
         static class MethodInfo {
             private String methodName;
             private String returnType;
             private List<ParameterInfo> parameters;
+
+            /**
+             * Constructs a MethodInfo object with the given method details.
+             *
+             * @param methodName The name of the method.
+             * @param returnType The return type of the method.
+             * @param parameters The list of method parameters.
+             */
 
             public MethodInfo(String methodName, String returnType, List<ParameterInfo> parameters) {
                 this.methodName = methodName;
@@ -73,10 +114,20 @@ public class JavaCodeAnalyzer {
                 return parameters;
             }
         }
+        /**
+         * Represents information about a method parameter, including its name and type.
+         */
 
         static class ParameterInfo {
             private String paramName;
             private String paramType;
+
+            /**
+             * Constructs a ParameterInfo object with the given parameter details.
+             *
+             * @param paramName The name of the parameter.
+             * @param paramType The type of the parameter.
+             */
 
             public ParameterInfo(String paramName, String paramType) {
                 this.paramName = paramName;
@@ -92,12 +143,27 @@ public class JavaCodeAnalyzer {
             }
         }
     }
+    /**
+     * The map to store information about each Java class in the analyzed code.
+     */
 
     private static Map<String, JavaClassInfo> classInfoMap = new HashMap<>();
-
-    static class NamingConventionVisitor extends VoidVisitorAdapter<Void> {
-
-        @Override
+   
+    /**
+     * A visitor class to traverse the AST and extract information based on naming conventions.
+     * Implements the VoidVisitorAdapter for convenient AST traversal.
+     */
+  
+     static class NamingConventionVisitor extends VoidVisitorAdapter<Void> {
+  
+        /**
+         * Visits a class or interface declaration and extracts information about the class.
+         *
+         * @param n   The ClassOrInterfaceDeclaration node in the AST.
+         * @param arg Unused argument.
+         */
+ 
+         @Override
         public void visit(ClassOrInterfaceDeclaration n, Void arg) {
             String className = n.getNameAsString();
             JavaClassInfo classInfo = new JavaClassInfo(className);
@@ -105,6 +171,13 @@ public class JavaCodeAnalyzer {
 
             super.visit(n, arg);
         }
+
+        /**
+         * Visits a field declaration and extracts information about the attribute.
+         *
+         * @param n   The FieldDeclaration node in the AST.
+         * @param arg Unused argument.
+         */
 
         @Override
         public void visit(FieldDeclaration n, Void arg) {
@@ -115,6 +188,12 @@ public class JavaCodeAnalyzer {
             }
             super.visit(n, arg);
         }
+        /**
+         * Visits a method declaration and extracts information about the method.
+         *
+         * @param n   The MethodDeclaration node in the AST.
+         * @param arg Unused argument.
+         */
 
         @Override
         public void visit(MethodDeclaration n, Void arg) {
@@ -137,6 +216,13 @@ public class JavaCodeAnalyzer {
         }
     }
 
+    /**
+     * Analyzes Java code within the specified directory by walking through all Java files
+     * and invoking the analyzeFile method for each file.
+     *
+     * @param directoryPath The path to the directory containing Java files.
+     */
+
     public static void analyzeCode(String directoryPath) {
         try {
             Files.walk(Paths.get(directoryPath))
@@ -146,6 +232,13 @@ public class JavaCodeAnalyzer {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Analyzes a single Java file by parsing it using JavaParser and visiting the AST using
+     * the NamingConventionVisitor to extract class, attribute, and method information.
+     *
+     * @param filePath The path to the Java file to be analyzed.
+     */
 
     private static void analyzeFile(Path filePath) {
         try {

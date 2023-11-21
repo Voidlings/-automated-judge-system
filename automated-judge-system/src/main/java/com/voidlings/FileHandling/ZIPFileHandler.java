@@ -4,13 +4,37 @@ import java.io.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class ZIPFileHandler implements FileHandler{
+/**
+ * The ZIPFileHandler class implements the FileHandler interface for handling ZIP files.
+ * It provides methods to check the format, extract files, and check if the ZIP contains Java files.
+ * Additionally, it creates Folder and JavaFile instances for the extracted files.
+ *
+ * @author Voidlings
+ * @version 1.0
+ */
+public class ZIPFileHandler implements FileHandler {
+
+    /**
+     * The Folder instance to store the extracted files and folders.
+     */
     private Folder submissionFolder;
 
-    public ZIPFileHandler(String folderName, String path){
-        submissionFolder= new Folder(folderName, path);
+    /**
+     * Constructs a ZIPFileHandler object with the specified folder name and path.
+     *
+     * @param folderName The name of the folder.
+     * @param path       The path of the folder.
+     */
+    public ZIPFileHandler(String folderName, String path) {
+        submissionFolder = new Folder(folderName, path);
     }
 
+    /**
+     * Checks if the provided file path has a ZIP format.
+     *
+     * @param path The file path to check.
+     * @return true if the file has a ZIP format, false otherwise.
+     */
     @Override
     public Boolean checkFormat(String path) {
         // Check if the file exists
@@ -18,18 +42,21 @@ public class ZIPFileHandler implements FileHandler{
         if (!file.exists() || !file.isFile()) {
             return false;
         }
-        //Checks if the format of the file is zip
-        path = path.toLowerCase();
-
-        if(path.endsWith(".zip"))
-            return true;
         
-        return false;
+        // Checks if the format of the file is zip
+        path = path.toLowerCase();
+        return path.endsWith(".zip");
     }
 
+    /**
+     * Checks if the ZIP file contains Java files.
+     *
+     * @param filePath The path to the ZIP file.
+     * @return true if the ZIP file contains Java files, false otherwise.
+     */
     @Override
     public Boolean containsFileType(String filePath) {
-        //checks if the zip contains java files
+        // Checks if the zip contains java files
         try (ZipInputStream zipIn = new ZipInputStream(new FileInputStream(filePath))) {
             ZipEntry entry;
             while ((entry = zipIn.getNextEntry()) != null) {
@@ -40,10 +67,16 @@ public class ZIPFileHandler implements FileHandler{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
         return false;
     }
-    
+
+    /**
+     * Extracts files from the ZIP file and creates Folder and JavaFile instances for the extracted files.
+     *
+     * @param zipFilePath      The path to the ZIP file.
+     * @param destinationPath  The destination path to extract the files.
+     * @return The Folder instance containing the extracted files and folders, or null if extraction fails.
+     */
     @Override
     public Folder extractFiles(String zipFilePath, String destinationPath) {
         if (!containsFileType(zipFilePath)) {
@@ -57,7 +90,7 @@ public class ZIPFileHandler implements FileHandler{
             return null;
         }
 
-        // extract all the files in the zip
+        // Extract all the files in the zip
         try (ZipInputStream zipIn = new ZipInputStream(new FileInputStream(zipFilePath))) {
             ZipEntry entry;
             while ((entry = zipIn.getNextEntry()) != null) {
@@ -71,12 +104,11 @@ public class ZIPFileHandler implements FileHandler{
                 }
 
                 if (!outputFile.getParentFile().exists()) {
-                    // ensure directories are made for the files
+                    // Ensure directories are made for the files
                     outputFile.getParentFile().mkdirs();
                 }
 
-                
-                // use array buffer to read entry
+                // Use array buffer to read entry
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 byte[] buffer = new byte[4096];
                 int bytesRead;
@@ -85,17 +117,16 @@ public class ZIPFileHandler implements FileHandler{
                 }
 
                 if (!entryName.endsWith(".java")) {
-                    // if non-Java file encountered only add it to the destination directory
+                    // If a non-Java file is encountered, only add it to the destination directory
                     try (FileOutputStream fos = new FileOutputStream(outputFile)) {
                         fos.write(bos.toByteArray());
                     }
                     continue;
                 }
 
-                //if java file encountered, add to the destination directory and create JavaFile instances for addition to submissionFolder
-                String content = new String(bos.toByteArray());// content for JavaFile
+                // If a Java file is encountered, add to the destination directory and create JavaFile instances
+                String content = new String(bos.toByteArray()); // Content for JavaFile
 
-                
                 if (entryName.contains("/")) {
                     // If the entry is in a subdirectory, create nested folders
                     String[] folders = entryName.split("/");
@@ -105,7 +136,7 @@ public class ZIPFileHandler implements FileHandler{
                         // Check if the folder already exists
                         FileComponent existingComponent = currentFolder.getComponentByName(folders[i]);
                         if (existingComponent == null) {
-                            currentFolder.addComponent(new Folder(folders[i], (destinationPath + "/"+ folders[i])));
+                            currentFolder.addComponent(new Folder(folders[i], (destinationPath + "/" + folders[i])));
                             existingComponent = currentFolder.getComponentByName(folders[i]);
                         }
                         currentFolder = (Folder) existingComponent;
@@ -119,7 +150,7 @@ public class ZIPFileHandler implements FileHandler{
                         fos.write(bos.toByteArray());
                     }
                 } else {
-                    // Otherwise, add file directly to submissionFolder
+                    // Otherwise, add the file directly to submissionFolder
                     submissionFolder.addComponent(new JavaFile(entryName, content, (destinationPath + "/" + entryName)));
                 }
             }
@@ -130,9 +161,14 @@ public class ZIPFileHandler implements FileHandler{
         return submissionFolder;
     }
 
+    /**
+     * Retrieves the Folder instance containing the extracted files and folders.
+     *
+     * @return The Folder instance.
+     */
     @Override
     public Folder getFolder() {
         return this.submissionFolder;
     }
-    
 }
+

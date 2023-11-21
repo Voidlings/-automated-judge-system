@@ -7,16 +7,32 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * The JavatoText class implements the FileConverter interface to convert Java files to text files.
+ *
+ * @author Voidlings
+ * @version 1.0
+ */
 public class JavatoText implements FileConverter {
 
-    public JavatoText(){
-        
+    /**
+     * Default constructor for JavatoText.
+     */
+    public JavatoText() {
     }
-    
-    public String convert(String filename) throws Exception{
+
+    /**
+     * Converts the given Java file to a text file and returns the path of the generated text file.
+     *
+     * @param filename The path of the Java file to be converted.
+     * @return The path of the generated text file.
+     * @throws Exception If an error occurs during the conversion process.
+     */
+    @Override
+    public String convert(String filename) throws Exception {
         File file = new File(filename);
         String path = file.getPath();
-        // System.out.println(path);
+
         // Provide the path to the input Java file
         String inputFilePath = path;
 
@@ -37,6 +53,14 @@ public class JavatoText implements FileConverter {
         }
         return outputFilePath;
     }
+
+    /**
+     * Reads the content of the Java file.
+     *
+     * @param filePath The path of the Java file.
+     * @return The content of the Java file as a string.
+     * @throws IOException If an error occurs during file reading.
+     */
     private static String readJavaFile(String filePath) throws IOException {
         StringBuilder content = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
@@ -47,10 +71,17 @@ public class JavatoText implements FileConverter {
         }
         return content.toString();
     }
+
+    /**
+     * Writes the given content to a text file.
+     *
+     * @param filePath The path of the text file to be written.
+     * @param content  The content to be written to the text file.
+     * @throws IOException If an error occurs during file writing.
+     */
     private static void writeTextFile(String filePath, String content) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             writer.write(content);
         }
     }
-    
 }
