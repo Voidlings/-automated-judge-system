@@ -88,10 +88,10 @@ public class App {
             // Methods: Marks per method in ArrayList. If present, mark given.
             MethodTestCase gradeMethods = new MethodTestCase(specificationClasses, javas);
             // Sum method grades and attribute grades in order to get total grade.
-
+            /* 
             System.out.println("Total marks obtained from the assignment: " + (gradeAttr.getTotalScore() + gradeMethods.getTotalScore() + " marks")); 
             System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-
+            */
             ArrayList<AttributeEval> attrEval = gradeAttr.getAttributeEvals();
             ArrayList<MethodEval> methodEval = gradeMethods.getMethodEvals();
 
@@ -110,6 +110,8 @@ public class App {
             EvaluationReport report = new PDFEvaluationReport(attrEval, methodEval);
             Generator pdfGenerator = new PDFGenerator(report, folder.getName());
             pdfGenerator.generate();
+            System.out.println("Report generated for " + folder.getName());
         }
     }
 }
+ 
