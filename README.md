@@ -77,6 +77,9 @@ The lecturer or teaching assistant can review the reports and provide additional
 *If the PDF assignment rubric file is not found, the system throws an error.
 (I need to go through the code further to get more)
 
+ # Target Students:
+
+The target audience is students in Java programming courses. The system aims to provide a fair and automated assessment of their Java assignments, offering valuable feedback and grading based on specified criteria.
 
 # Design
 
@@ -109,8 +112,25 @@ All SubTypes are replaceable by the their base classes. For Example Specificatio
  Concrete Classes that implement a high level module (Abstract Classes, Interfaces, etc) are not directly instantiated with there static and dynamic types being that of the low level class. PolyMorphism is used throughout the application where the static type is that of the high level module and the dynamic type is that of the low level module for all possible instances of Instantions and object references. 
 
 
+### Implementation
+- **How to Run:**
+  - To run the project, follow these steps:
+    1. Install Java Development Kit (JDK).
+    2. Choose and install a Java IDE (e.g., IntelliJ IDEA, Eclipse, or Visual Studio Code).
+    3. Download and set up the Spire.PDF library.
+    4. Clone or download the project code from the GitHub repository.
+    5. Obtain a valid license key for the Spire.PDF library.
+    6. Configure the project by updating the license key in the code.
+    7. Run the `App` class with the main method.
 
+- **Setup Requirements:**
+  - The setup requires JDK, an IDE, the Spire.PDF library, and a valid license key. Additional instructions may be found in the project documentation.
 
+### Testing and Evaluation
+- **Test Cases and Suites:**
+  - The project employs test cases for grading attributes (`AttributeTestCase`) and methods (`MethodTestCase`). These cases evaluate Java files against specifications, producing attribute and method evaluations.
+
+- **Demo Video Link:**
 
 
 
