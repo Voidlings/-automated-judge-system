@@ -67,7 +67,7 @@ public class PDFtoText implements FileConverter {
         pdf.close();
 
         // Save the extracted text to a file
-        String outputfile = "AssignmentMarkScheme.txt";
+        String outputfile = "Submissions\\" + file.getName().replace(".pdf", ".txt");
         FileWriter fw = new FileWriter(outputfile);
         fw.write(builder.toString());
         fw.flush();

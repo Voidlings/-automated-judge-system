@@ -2,10 +2,11 @@ package com.voidlings.TestCases;
 
 import java.util.ArrayList;
 
+import com.itextpdf.text.pdf.security.TSAClient;
 import com.voidlings.EvaluationHandling.MethodEval;
 import com.voidlings.SpecificationHandling.SpecificationComponents;
 
-public class MethodTestCase{
+public class MethodTestCase implements TestCase{
   private ArrayList<SpecificationComponents> specs;
   private ArrayList<SpecificationComponents> javaFiles;
   private int totalScore; 
@@ -16,39 +17,35 @@ public class MethodTestCase{
     this.javaFiles = javaFiles;
     this.totalScore = 0;
     this.methodEvals = new ArrayList<MethodEval>();
-    methodTestCase();
+    performTests();
   }
 
-  public void methodTestCase() {
-    int counter = 0;
-
+  public void performTests() {
     // Takes ArrayList of all specification information as well as ArrayList of all java classes.
-      for (SpecificationComponents specClass : specs){
+    for (SpecificationComponents specClass : specs){
         // Find if the class exists in the assignment specs, and then continue grading logic.
         for (SpecificationComponents java: javaFiles){
-          if (java.getClassName().contains(specClass.getClassName())){
-            // System.out.println("Class " + java.getClassName() + " exists.");
+            if (java.getClassName().contains(specClass.getClassName())){
+                // For each method in specClass, check if it exists in java.
+                for (int i = 0; i < specClass.getAllMethods().size(); i++){
+                    String specMethod = specClass.getAllMethods().get(i).replace(" ", "");
+                    int marks = Integer.valueOf(specClass.getAllMarks().get(i).trim());
 
-            // For each method in methods, if method exists, then mark is given.
-            for (String assignMethod : java.getAllMethods()){
+                    boolean methodExists = java.getAllMethods().stream()
+                        .map(method -> method.replace(" ", ""))
+                        .anyMatch(method -> method.contains(specMethod));
 
-              int marks = Integer.valueOf(specClass.getAllMarks().get(counter).trim());
-              
-              if (assignMethod.replace(" ","").contains(assignMethod.replace(" ",""))){
-                // System.out.println("Method " + assignMethod + " exists.");
-                methodEvals.add(new MethodEval(assignMethod, true, marks, marks));
-                totalScore += marks;
-              } else {
-                methodEvals.add(new MethodEval(assignMethod, false, 0, marks));
-                //System.out.println("Method " + assignMethod + " is missing from the assignment.");
-              }
+                    if (methodExists){
+                        methodEvals.add(new MethodEval(specMethod, true, marks, marks));
+                        totalScore += marks;
+                    } else {
+                        methodEvals.add(new MethodEval(specMethod, false, 0, marks));
+                    }
+                }
             }
-            counter += 1; // Update counter - index for finding correct mark.
-          }
-          counter = 0;
         }
-      }
     }
+  }
 
   public int getTotalScore(){
     return totalScore;

@@ -60,9 +60,28 @@ public class AttributeEval implements Eval {
      */
     public void setComment() {
         if (passed) {
-            comment = "Attribute " + name + " exists.";
+            comment = "Attribute  exists.";
         } else {
-            comment = "Attribute " + name + " is missing from the assignment or has an inaccurate declaration of attribute.";
+            comment = "Attribute is missing from the assignment or has an inaccurate declaration of attribute.";
         }
     }
+
+    /**
+     * Returns the name of the attribute.
+     *
+     * @return The name of the attribute.
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Returns the evaluation result.
+     *
+     * @return The evaluation result.
+     */
+    public boolean isPassed() {
+        return passed;
+    }
+    
 }

@@ -36,7 +36,7 @@ public class App {
        com.spire.license.LicenseProvider.setLicenseKey("license.elic.xml");
        
 
-        String directoryPath= "testFiles.zip"; //replace with actual filepath name, test file for now
+        String directoryPath= "Submissions\\StudentSubmissions.zip"; //replace with actual filepath name, test file for now
 
         String destinationPath= "Submissions"; //adds to submissions folder on same directory as the App.java file. Do not change this until further notice.
         
@@ -47,11 +47,11 @@ public class App {
         
         // Check if the file format is a ZIP file
         if (!zipFileHandler.checkFormat(directoryPath)) {
-            System.err.println("Invalid file format: ZIP File required.");
+            System.err.println("\nInvalid file format: ZIP File required.");
             return;
         }
         else{
-            System.out.println("Valid ZIP file format.");
+            System.out.println("\nValid ZIP file format.");
         }
 
         // Extract files from the ZIP file

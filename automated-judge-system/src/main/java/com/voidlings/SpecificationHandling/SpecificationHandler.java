@@ -131,7 +131,7 @@ public class SpecificationHandler {
                 String data = read.nextLine();
                 // reads the first word searching for Keywords Attribute + Method
                 firstWord = getFirstWord(data);
-
+    
                 //read mark scheme table
                 if (isMarkScheme == true) {
                     if (!firstWord.equals("Class") && !firstWord.equals("Total")) {
@@ -141,7 +141,7 @@ public class SpecificationHandler {
                         isMarkScheme = false;
                     }
                 }
-
+    
                 //Switching from reading Methods to Attributes
                 if (firstWord.equals("Method")) {
                     isMethod = true;
@@ -151,14 +151,12 @@ public class SpecificationHandler {
                     if (classCount > 0) {
                         specificationClasses.add(AsgClass);
                     }
-                    AsgClass = createAssignmentClass(classList.get(attributeCount));//new SpecificationClass(classList.get(attributecount));
+                    AsgClass = createAssignmentClass(classList.get(attributeCount));
                     classCount++;
-
-                    //AsgClass = specificationClasses.get(attributecount);
                     isMethod = false;
                     isAttribute = true;
                 }
-
+    
                 //Pulling Attributes
                 if (isAttribute == true) {
                     if (firstWord.equals("Attribute")) {
@@ -168,7 +166,7 @@ public class SpecificationHandler {
                     AsgClass.addAttribute(data);
                     attributes.add(data);
                 }
-
+    
                 //Pulling methods
                 if (isMethod == true) {
                     if (firstWord.equals("Method")) {
@@ -181,13 +179,18 @@ public class SpecificationHandler {
                     methods.add(data);
                 }
             }
-            specificationClasses.add(AsgClass);
+    
+            // Add the last class if it has not been added yet
+            if (specificationClasses.isEmpty() || !specificationClasses.get(specificationClasses.size() - 1).equals(AsgClass)) {
+                specificationClasses.add(AsgClass);
+            }
+    
             read.close();
-
+    
         } catch (FileNotFoundException e) {
             System.out.println("File not found!");
         }
-
+    
         return specificationClasses;
     }
 }

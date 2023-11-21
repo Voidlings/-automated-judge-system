@@ -46,7 +46,7 @@ public class PDFGenerator implements Generator {
      * @throws IOException If an I/O error occurs during the PDF generation.
      */
     public void generate() throws IOException {
-        String directory = "Reports/";
+        String directory = "SubmissionReports/";
         File dir = new File(directory);
         if (!dir.exists()) {
             dir.mkdirs();
@@ -62,7 +62,7 @@ public class PDFGenerator implements Generator {
             document.addPage(page);
 
             PDPageContentStream contentStream = new PDPageContentStream(document, page);
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 9);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 8);
             contentStream.beginText();
             int yPosition = 725;
             contentStream.newLineAtOffset(25, yPosition);
@@ -72,45 +72,48 @@ public class PDFGenerator implements Generator {
 
             String[] summary = report.getTestCaseSummary().split("\n");
             for (String line : summary) {
-                if (yPosition < 45) {  // Check if near the bottom of the page
-                    contentStream.endText();
-                    contentStream.close();
+                String[] words = line.split(" ");
+                for (String word : words) {
+                    if (yPosition < 45) {  // Check if near the bottom of the page
+                        contentStream.endText();
+                        contentStream.close();
 
-                    page = new PDPage();
-                    document.addPage(page);
+                        page = new PDPage();
+                        document.addPage(page);
 
-                    contentStream = new PDPageContentStream(document, page);
-                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 9);
-                    contentStream.beginText();
-                    yPosition = 725;
-                    contentStream.newLineAtOffset(25, yPosition);
+                        contentStream = new PDPageContentStream(document, page);
+                        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 8);
+                        contentStream.beginText();
+                        yPosition = 725;
+                        contentStream.newLineAtOffset(25, yPosition);
+                    }
+                    contentStream.showText(word + " ");
                 }
-                contentStream.showText(line);
                 yPosition -= 20;
                 contentStream.newLineAtOffset(0, -20);
             }
 
             String[] results = report.getTestCaseResults().split("\n");
-            for (int i = 0; i < results.length; i++) {
-                String[] words = results[i].split(" ");
+            for (String line : results) {
+                String[] words = line.split(" ");
                 for (String word : words) {
+                    if (yPosition < 40) {  
+                        contentStream.endText();
+                        contentStream.close();
+
+                        page = new PDPage();
+                        document.addPage(page);
+
+                        contentStream = new PDPageContentStream(document, page);
+                        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 8);
+                        contentStream.beginText();
+                        yPosition = 725;
+                        contentStream.newLineAtOffset(25, yPosition);
+                    }
                     contentStream.showText(word + " ");
                 }
                 yPosition -= 20;
                 contentStream.newLineAtOffset(0, -20);
-                if (yPosition < 40) {  // Check if near the bottom of the page
-                    contentStream.endText();
-                    contentStream.close();
-
-                    page = new PDPage();
-                    document.addPage(page);
-
-                    contentStream = new PDPageContentStream(document, page);
-                    contentStream.setFont(PDType1Font.HELVETICA_BOLD, 9);
-                    contentStream.beginText();
-                    yPosition = 725;
-                    contentStream.newLineAtOffset(25, yPosition);
-                }
             }
             String reportName = "Report_" + title + ".pdf";
             contentStream.endText();

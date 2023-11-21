@@ -52,9 +52,9 @@ public class MethodEval implements Eval {
      */
     public void setComment() {
         if (passed) {
-            comment = "Method " + name + " exists.";
+            comment = "Method exists.";
         } else {
-            comment = "Method " + name + " is missing from the assignment or has an inaccurate declaration of method.";
+            comment = "Method is missing from the assignment or has an inaccurate declaration of method.";
         }
     }
 }

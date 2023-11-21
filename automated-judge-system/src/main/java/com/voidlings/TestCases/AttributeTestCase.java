@@ -2,12 +2,10 @@ package com.voidlings.TestCases;
 
 import java.util.ArrayList;
 
-import org.w3c.dom.Attr;
-
 import com.voidlings.SpecificationHandling.SpecificationComponents;
 import com.voidlings.EvaluationHandling.AttributeEval;
 
-public class AttributeTestCase {
+public class AttributeTestCase implements TestCase{
   private ArrayList<SpecificationComponents> specs;
   private ArrayList<SpecificationComponents> javaFiles;
   private int totalScore; 
@@ -18,31 +16,34 @@ public class AttributeTestCase {
     this.javaFiles = javaFiles;
     this.totalScore = 0;
     this.attributeEvals = new ArrayList<AttributeEval>();
-    attrTestcase();
+    performTests();
   }
 
-  public void attrTestcase () {
+  public void performTests() {
+    // Takes ArrayList of all specification information as well as ArrayList of all java classes.
     for (SpecificationComponents specClass : specs){
-      // Find if the class exists in the assignment specs, and then continue grading logic.
-      for (SpecificationComponents java: javaFiles){
-        if (java.getClassName().contains(specClass.getClassName())){
-          // System.out.println("Class " + java.getClassName() + " exists.");
+        // Find if the class exists in the assignment specs, and then continue grading logic.
+        for (SpecificationComponents java: javaFiles){
+            if (java.getClassName().contains(specClass.getClassName())){
+                // For each attribute in specClass, check if it exists in java.
+                for (String specAttr : specClass.getAllAttributes()) {
+                  final String finalSpecAttr = specAttr.replace(" ", "").replace("private", "").replace("public", "").replace("static", "");
 
-          // For each attribute in attributes, if attribute exists, then mark is given. 1 mark per attribute.
-          for (String assignAttr : java.getAllAttributes()){
-            if (assignAttr.replace(" ","").contains(assignAttr.replace(" ","").replace("private", "").replace("public", "").replace("static", ""))){
-              attributeEvals.add(new AttributeEval(assignAttr, true, 1, 1));
-              totalScore += 1;
-              ////System.out.println("Attribute " + assignAttr + " is implemented in the assignment.");
-            } else {
-              attributeEvals.add(new AttributeEval(assignAttr, false, 0, 1));
-              //System.out.println("Attribute " + assignAttr + " is missing from the assignment.");
+                  boolean attrExists = java.getAllAttributes().stream()
+                      .map(attr -> attr.replace(" ", "").replace("private", "").replace("public", "").replace("static", ""))
+                      .anyMatch(attr -> attr.contains(finalSpecAttr));
+
+                  if (attrExists) {
+                    attributeEvals.add(new AttributeEval(specAttr, true, 1, 1));
+                    totalScore += 1;
+                  } else {
+                    attributeEvals.add(new AttributeEval(specAttr, false, 0, 1));
+                  }
+                }
             }
-          }
         }
-      }
     }
-  }
+}
 
   public int getTotalScore(){
     return totalScore;
