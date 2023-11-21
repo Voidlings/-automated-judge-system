@@ -1,0 +1,84 @@
+package com.voidlings.Submissions.s1;
+//ID= 816033710
+import java.util.*;
+import java.time.*;
+
+public class Flight{
+    String flightNo;
+    String destination;
+    String origin;
+    LocalDateTime flightDate;
+    LuggageManifest manifest;
+    
+    Flight(String flightNo, String destination, String origin,LocalDateTime flightDate){
+        this.flightNo= flightNo;
+        this.destination= destination;
+        this.origin= origin;
+        this.flightDate= flightDate;
+        manifest= new LuggageManifest();
+    }
+    
+    String checkInLuggage(Passenger p){
+        boolean checkInPossible=false;
+        String output="";
+        
+        if(this.flightNo.equals(p.flightNo))
+            checkInPossible= true;
+        
+        if(checkInPossible== true){
+            output= manifest.addLuggage(p, this);
+        }
+        
+        if(checkInPossible== false)
+            output= p.toString() + "\nInValid Flight. Flight No: " + p.flightNo + " does not exist.\n";
+            
+        return output;
+    }
+    
+    String printLuggageManifest(){
+        return toString() + "\n" + manifest.toString();
+    }
+    
+    static int getAllowedLuggage(char cabinClass){
+        char[] classes= {'F', 'B', 'P', 'E'};
+        
+        if(Character.compare(cabinClass, 'F') == 0)
+            return 3;
+            
+        if(Character.compare(cabinClass, 'B') == 0)
+            return 2;
+            
+        if(Character.compare(cabinClass, 'P') == 0)
+            return 1;
+            
+        if(Character.compare(cabinClass, 'E') == 0)
+            return 0;
+            
+        return -1;
+    }
+    
+    public String toString(){
+        return flightNo + " Destination: " + destination + " Origin: " + origin + " " + flightDate;
+    }
+    
+    //Accessors
+    public String getFlightNo(){
+        return flightNo;
+    }
+    
+    public String getDestination(){
+        return destination;
+    }
+    
+    public String getOrigin(){
+        return origin;
+    }
+    
+    public LocalDateTime getFlightDate(){
+        return flightDate;
+    }
+    
+    public LuggageManifest getLuggageManifest(){
+        return manifest;
+    }
+}
