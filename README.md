@@ -29,7 +29,7 @@ Outcome: Enhanced grading efficiency, allowing educators to focus on lesson plan
   
   * The System must have access to a PDF version of an Assignment rubric, this rubric should follow the table convention.
   * The System must have access to a directory or zero or more Zip files.
-  * The System must be run in an environment with permissions that allow for the creation of directories. (May move this to another category)
+  * The System must be run in an environment with permissions that allow for the creation of directories.
   * The System must traverse the directory of student assignment submissions, these must be .zip files, and each submission should be extracted to an individual directory within the "Submissions" directory.
 
 * Code Evaluation
@@ -74,8 +74,8 @@ The lecturer or teaching assistant can review the reports and provide additional
 
  # Alternate Flows:
 
-*If the PDF assignment rubric file is not found, the system throws an error.
-(I need to go through the code further to get more)
+* If the PDF assignment rubric file is not found, the system throws an error.
+* If no ZIP files are found, the system alerts the user as such.
 
  # Target Students:
 
@@ -101,13 +101,15 @@ The target audience is students in Java programming courses. The system aims to 
 
 
  * # Open/Closed Principle:
- In the applications implementation Open/ Closed principle was used in multiple instance in an attempt to design Classes and Methods to facilitate new functionality without editing existing source code. This was done through the use of interfaces that allow the implemented concrete classes to facility modified functionality. seen in the
+ In the applications implementation Open/ Closed principle was used in multiple instance in an attempt to design Classes and Methods to facilitate new functionality without editing existing source code. This was done through the use of interfaces that allow the implemented concrete classes to facility modified functionality.
+ 
  * # Liskov Substitution Principle:
 All SubTypes are replaceable by the their base classes. For Example Specification Components can make reference to all of the functionalities of its subtype specification class.
 
 
  * # Interface Segregation Principle:
  Class within the application a not forced to implement interfaces in which is not 100% necessary for the functionality of the concrete class.
+ 
  * # Dependency Inversion Principle:
  Concrete Classes that implement a high level module (Abstract Classes, Interfaces, etc) are not directly instantiated with there static and dynamic types being that of the low level class. PolyMorphism is used throughout the application where the static type is that of the high level module and the dynamic type is that of the low level module for all possible instances of Instantions and object references. 
 
