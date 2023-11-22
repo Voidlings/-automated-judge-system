@@ -36,7 +36,7 @@ public class App {
        com.spire.license.LicenseProvider.setLicenseKey("license.elic.xml");
        
 
-        String directoryPath= "Submissions\\StudentSubmissions.zip"; //replace with actual filepath name, test file for now
+        String directoryPath= "Submissions" + File.separator + "StudentSubmissions.zip"; //replace with actual filepath name
 
         String destinationPath= "Submissions"; //adds to submissions folder on same directory as the App.java file. Do not change this until further notice.
         
