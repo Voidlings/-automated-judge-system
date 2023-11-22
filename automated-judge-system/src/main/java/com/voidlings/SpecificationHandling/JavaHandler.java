@@ -102,7 +102,7 @@ public class JavaHandler {
                 Scanner read = new Scanner(file);
                 while (read.hasNextLine()) {
                     String data = read.nextLine();
-                    if (data.isEmpty()) {
+                    if (data.isEmpty() && read.hasNextLine()) {
                         data = read.nextLine();
                     }
                     firstWord = firstWordGetter(data);
