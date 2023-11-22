@@ -28,7 +28,7 @@ public class MethodTestCase implements TestCase{
             if (java.getClassName().contains(specClass.getClassName())){
                 // For each method in specClass, check if it exists in java.
                 for (int i = 0; i < specClass.getAllMethods().size(); i++){
-                    String specMethod = specClass.getAllMethods().get(i).replace(" ", "");
+                    String specMethod = specClass.getAllMethods().get(i).replace(" ", "").replace("?", "");
                     int marks = Integer.valueOf(specClass.getAllMarks().get(i).trim());
 
                     boolean methodExists = java.getAllMethods().stream()

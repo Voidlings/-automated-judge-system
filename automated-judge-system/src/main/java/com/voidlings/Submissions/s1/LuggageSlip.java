@@ -1,54 +1,28 @@
 package com.voidlings.Submissions.s1;
-//ID= 816033710
-import java.util.*;
-import java.time.*;
+// Student ID: 816033642
 
 public class LuggageSlip{
-    Passenger owner;
-    static int luggageSlipIDCounter= 1;
-    static String luggageSlipID;
-    String label;
+    private Passenger owner;
+    private static int luggageSlipIDCounter = 1;
+    private String luggageSlipID;
+    private String label;
     
-    LuggageSlip(Passenger p, Flight f){
-        this.owner= p;
-        this.luggageSlipID= f.flightNo + "_" + p.lastName + "_" + luggageSlipIDCounter++;
-        this.label= "";
+    public LuggageSlip(Passenger p, Flight f){
+        // Initialize all state, label as an empty string.
+        owner = p;
+        luggageSlipID = f.getFlightNumber() + "_" + p.getLastName() + "_" + luggageSlipIDCounter;
+        label = "0.0";
+        luggageSlipIDCounter++;
     }
     
-    LuggageSlip(Passenger p, Flight f, String label){
-        this.owner= p;
-        this.luggageSlipID= f.flightNo + "_" + p.lastName + "_" + luggageSlipIDCounter++;
-        this.label= label;
+    public LuggageSlip(Passenger p, Flight f, String label){
+        // Initialize all state, label as an empty string.
+        owner = p;
+        this.label = label;
+        luggageSlipID = f.getFlightNumber() + "_" + p.getLastName() + "_" + luggageSlipIDCounter;
+        luggageSlipIDCounter++;
     }
     
-    boolean hasOwner(String passportNumber){
-        if(owner.passportNumber.equals(passportNumber))
-            return true;
-        else
-            return false;
-    }
-    
-     public String toString(){ 
-        String s= "";
-        
-        for(int i=0; i < this.owner.numLuggage; i++){
-            s += getLuggageSlipID() + " " + owner.toString() + "\n";
-                if(label.isEmpty() == false)
-                    s += getLabel() + "\n";
-        }
-        return s;
-        
-    }
-    
-    public String toStringOne(){  //One slip
-        String s= "";
-            s += getLuggageSlipID() + " " + owner.toString() + "\n";
-                if(label.isEmpty() == false)
-                    s += getLabel() + "\n";
-        return s;
-    }
-    
-    //Accessors
     public Passenger getOwner(){
         return owner;
     }
@@ -63,5 +37,28 @@ public class LuggageSlip{
     
     public String getLabel(){
         return label;
+    }
+    
+    public boolean hasOwner(String passportNumber){
+        if (owner.getPassportNumber().equals(passportNumber)){
+            return true;
+        }
+        return false;
+    }
+    
+    public String toString(){
+        return "Luggage Slip ID: " + luggageSlipID +
+                "\nPassport Number: " + owner.getPassportNumber() +
+                "\nName: " + owner.getFirstName().charAt(0) + "." + owner.getLastName().toUpperCase() +
+                "\nNumLuggage: " + owner.getNumLuggage()+
+                "\nClass: " + owner.getCabinClass() + 
+                "\nExcess cost: $" + label + "\n";
+    }
+    
+    public boolean equals(String passNum1, String passNum2){
+        if (passNum1 == passNum2){
+            return true;
+        }
+        return false;
     }
 }
