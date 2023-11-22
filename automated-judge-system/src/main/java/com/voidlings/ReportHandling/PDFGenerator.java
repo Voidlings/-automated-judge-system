@@ -87,7 +87,9 @@ public class PDFGenerator implements Generator {
                         yPosition = 725;
                         contentStream.newLineAtOffset(25, yPosition);
                     }
-                    contentStream.showText(word + " ");
+                    if (word != null) {
+                        contentStream.showText(word + " ");
+                    }
                 }
                 yPosition -= 20;
                 contentStream.newLineAtOffset(0, -20);
@@ -110,7 +112,9 @@ public class PDFGenerator implements Generator {
                         yPosition = 725;
                         contentStream.newLineAtOffset(25, yPosition);
                     }
-                    contentStream.showText(word + " ");
+                    if (word != null) {
+                        contentStream.showText(word + " ");
+                    }
                 }
                 yPosition -= 20;
                 contentStream.newLineAtOffset(0, -20);
