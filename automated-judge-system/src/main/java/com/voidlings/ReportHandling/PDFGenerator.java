@@ -62,7 +62,7 @@ public class PDFGenerator implements Generator {
             document.addPage(page);
 
             PDPageContentStream contentStream = new PDPageContentStream(document, page);
-            contentStream.setFont(PDType1Font.TIMES_BOLD, 8);
+            contentStream.setFont(PDType1Font.HELVETICA, 8);
             contentStream.beginText();
             int yPosition = 725;
             contentStream.newLineAtOffset(25, yPosition);
@@ -82,13 +82,14 @@ public class PDFGenerator implements Generator {
                         document.addPage(page);
 
                         contentStream = new PDPageContentStream(document, page);
-                        contentStream.setFont(PDType1Font.TIMES_BOLD, 8);
+                        contentStream.setFont(PDType1Font.HELVETICA, 8);
                         contentStream.beginText();
                         yPosition = 725;
                         contentStream.newLineAtOffset(25, yPosition);
                     }
                     if (word != null) {
-                        contentStream.showText(word + " ");
+                        String cleanWord = word.replaceAll("[^\\x00-\\x7F]", "");
+                        contentStream.showText(cleanWord + " ");
                     }
                 }
                 yPosition -= 20;
@@ -107,13 +108,14 @@ public class PDFGenerator implements Generator {
                         document.addPage(page);
 
                         contentStream = new PDPageContentStream(document, page);
-                        contentStream.setFont(PDType1Font.TIMES_BOLD, 8);
+                        contentStream.setFont(PDType1Font.HELVETICA, 8);
                         contentStream.beginText();
                         yPosition = 725;
                         contentStream.newLineAtOffset(25, yPosition);
                     }
                     if (word != null) {
-                        contentStream.showText(word + " ");
+                        String cleanWord = word.replaceAll("[^\\x00-\\x7F]", "");
+                        contentStream.showText(cleanWord + " ");
                     }
                 }
                 yPosition -= 20;
