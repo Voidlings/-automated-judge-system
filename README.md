@@ -90,7 +90,7 @@ The target audience is students in Java programming courses. The system aims to 
  # Composite Design Pattern
  * Purpose: The composite design pattern was used to treat the Folder and JavaFile classes uniformly. They both implemented the FileComponent interface, this interface contains four abstract methods, getname, setName, isFolder, and getPath. This Design Pattern was implemented in a attempt to compose objects of similar nature into a hierachal system and then use them as though they were indiviual/ ungrouped components.
   
- * # Stratergy Design Pattern:
+ * # Strategy Design Pattern:
  * Purpose: The Strategy Design Pattern was used to give the system options in relation to file conversion.The two strategies for conversion would be the implementation of the two concrete strategy classes JavatoText and PDFtoTexT, both these classes implement the FileConverter interface. The implementation of this code can be seen in the JavaHandler class and the SpecificationHandler class.
 
 
@@ -218,14 +218,30 @@ Sample code:
 
 
 # Public Class MethodTestCase
+The purpose of this class is to generate a grade for the method implementations of the student’s code based on the assignment rubric.
 
+The class has a public constructor and can be instantiated from its sole client, the App.java class, using the following example code:
+
+MethodTestCase gradeMethods = new MethodTestCase(specificationArrayList, assigmentClassesArrayList);
+
+To use the class functionality, the following example code can be used:
+
+ArrayList<MethodEval> methodEval = gradeMethods.getMethodEvals();
 
 
 
 
 
 # Public Class AttributeTestCase
+The purpose of this class is to generate a grade for the attribute implementations of the student’s code based on the assignment rubric.
 
+The class has a public constructor and can be instantiated from its sole client, the App.java class, using the following example code:
+
+AttributeTestCase gradeAttr = new AttributeTestCase(specificationClasses, javas);
+
+To use the class functionality, the following example code can be used:
+
+ArrayList<AttributeEval> attrEval = gradeAttr.getAttributeEvals();
   
  
   
