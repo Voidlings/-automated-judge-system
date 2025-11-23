@@ -1,15 +1,6 @@
 # -automated-judge-system
 Project-COMP3607
 
-# -Introduction 
-Team Members:
-* Dominique David
-* Jasmine Dottin
-* Adrian Frection
-* Sarah Ghansam
-* Eysah Ali
-* Joshua Phillip
-
 Project Scope:
 
 This system will simplify the evaluation process by accepting zipped Java program submissions, assessing code correctness against assignment specifications, and generating detailed PDF reports with feedback and scores. It will be implemented entirely in Java and will adhere to best practices, incorporate design patterns, follow SOLID principles, and feature a comprehensive test suite to enhance the assignment evaluation process.
